@@ -1,5 +1,7 @@
 module Data.Time.Hora.Type.DmyHm where
 
+import GHC.Generics
+import Data.Binary
 import Data.Fixed
 import qualified Data.Time.Hora.Type.YmdHms as S
 
@@ -11,7 +13,7 @@ data DmyHm a = DmyHm {
     year::a,
     hour::a,
     minute::a
-    } deriving Eq
+    } deriving (Show, Eq)
 
 
 instance Functor DmyHm where
@@ -23,17 +25,17 @@ instance Functor DmyHm where
             minute = f0 (minute d0)
         } 
 
-deriving instance Show (DmyHm Int)
-deriving instance Show (DmyHm String)
-
 
 -- | @(DmyHm {day = "12", month = "12", year = "2016", hour = "17", minute = "32"},"59.727280400000")@
 type DmyHmp' = (DmyHm String, String)    --  dmyhm
 
 
 -- | @DmyHmp (DmyHm {day = 12, month = 12, year = 2016, hour = 17, minute = 32},59.727482058000)@
-newtype DmyHmp = DmyHmp (DmyHm Int, Pico) deriving (Eq,Show)   --  dmyhm, pico
+newtype DmyHmp = DmyHmp (DmyHm Int, Pico) deriving (Eq, Show, Generic)  --  dmyhm, pico
 
+deriving instance Generic (DmyHm Int)
+instance Binary (DmyHm Int)
+instance Binary DmyHmp
 
 {- | convert from more precise to more common type -}
 pico2second::DmyHmp -> S.YmdHms
