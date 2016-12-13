@@ -8,8 +8,7 @@ data TimeSpan a = Sec a
     | Milli a deriving (Show, Eq, Ord)
 
 
-data Tz a = Tz TimeZone a  deriving Show
-
+data Tz a = Tz TimeZone a  deriving (Show,Functor)
 
 -- | constraint
 type TwoInt a b = (Integral a, Integral b)

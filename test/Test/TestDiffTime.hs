@@ -5,7 +5,7 @@ import Debug.Trace
 import Data.Time.Clock
 import Control.Concurrent
 import Data.Time.Hora.Timestamp
-import Data.Time.Hora.Future
+import Data.Time.Hora.Future as F
 import Data.Time.Hora.Type.Time
 
 
@@ -17,7 +17,7 @@ main = hspec $ do
             t1 <- getCurrentTime
             threadDelay 7000
             t2 <- getCurrentTime
-            let diff3 = timeDiffMs t1 t2
+            let diff3 = t1 F.- t2
             traceIO $ show diff3
             1 `shouldBe` 1
           it "DmyHmP" $ do
