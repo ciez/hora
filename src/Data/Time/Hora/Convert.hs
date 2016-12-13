@@ -59,3 +59,4 @@ toDiffTime t0@(Milli s0) = picosecondsToDiffTime $ toPico t0
 nominalDiff::Integral a => TimeSpan a -> NominalDiffTime
 nominalDiff ts0 = let s1 = toPico ts0::Integer
                 in fromRational $ s1 % picoSec
+

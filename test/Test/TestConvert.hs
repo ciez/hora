@@ -23,6 +23,18 @@ test = hspec $ do
               toMilli (Sec $ i 17) `shouldBe` (toMilli $ Pico $ toPico $ Sec $ i 17)
               toMilli (Milli $ i 170) `shouldBe` (toMilli $ Pico $ toPico $ Milli $ i 170)
               s1 `shouldBe` i3
+       describe "TimeSpan Num" $ do
+          it "pico Num" $ do 
+              Milli 1 + (Milli 2) `shouldBe` (Pico $ (picoMs * 1) + (picoMs * 2))  
+              Sec 2 - (Sec 1) `shouldBe` (Pico $ (picoSec * 2) - (picoSec * 1))  
+              Pico 2 * (Milli 10) `shouldBe` (Pico $ 2 * (picoMs * 10))
+       describe "TimeSpan Ord" $ do
+          it "pico Ord" $ do
+              Milli 10 `shouldSatisfy` (< (Sec 1))   
+              Milli 10 `shouldSatisfy` (> (Milli 9))   
+              Pico 10 `shouldSatisfy` (< (Sec 1))   
+              Pico 10 `shouldSatisfy` (< (Milli 1))   
+              picoMs * 10 `shouldSatisfy` (== (toPico $ Milli 10))   
         where p1 = toPico (Sec i3)::Int
               m1 = toMilli (Pico p1)::Int
               s1 = toSec (Milli m1)::Int
