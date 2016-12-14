@@ -1,3 +1,8 @@
+#####   1.1
+    API overhaul
+    
+    remove dep on regex-do 
+
 #####   1.0.3
     fix Eq, Ord TimeSpan: was derived. Implemented manually
     

@@ -4,8 +4,6 @@ import Test.Hspec
 import Data.Time.Hora.Type.Time
 import Data.Time.Hora.Convert
 import Data.Time.Clock
-import Data.Time.Hora.Type.DmyHm as D
-import Data.Time.Hora.Type.YmdHms as Y
 
 
 main::IO()
@@ -47,8 +45,6 @@ doc = hspec $ do
         it "toPicos sec" $  toPico (Sec 1) `shouldBe` 1000000000000
         it "toMillis sec" $  toMilli (Sec 1) `shouldBe` 1000
         it "toDiffTime sec" $  toDiffTime (Sec 1) `shouldBe` (secondsToDiffTime 1)
-        it "pico2second" $ pico2second (DmyHmp (DmyHm {D.day = 3, D.month = 4, D.year = 2016, D.hour = 10, D.minute = 31}, 21.2589))
-                `shouldBe` YmdHms { Y.day = 3, Y.month = 4, Y.year = 2016, Y.hour = 10, Y.minute = 31, Y.second = 21}
                 
 
 i::Int -> Int

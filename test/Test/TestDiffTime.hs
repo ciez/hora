@@ -21,10 +21,10 @@ main = hspec $ do
             traceIO $ show diff3
             1 `shouldBe` 1
           it "DmyHmP" $ do
-            Tz tz1 dmy2 <- now
-            traceIO $ show dmy2
+            dmy2 <- now
+            traceIO $ "TestDiffTime" ++ (show dmy2)
             1 `shouldBe` 1
           it "dmy_local" $ do
-            Tz tz1 l1 <- d
+            Tz tz1 l1 <- d'
             traceIO $ show l1
             1 `shouldBe` 1

@@ -21,7 +21,11 @@ type TwoInt a b = (Integral a, Integral b)
 
 
 
--- | ! fromInteger returns 'Pico'. assumes the value is Pico seconds
+{- | ! fromInteger returns 'Pico'. assumes the value is Pico seconds
+
+>>> Milli 397100 + (Sec 2) + 37891470000
+Pico 399137891470000
+-}
 instance Integral a => Num (TimeSpan a) where
     (+) = withPico (+)
     (*) = withPico (*)
@@ -33,8 +37,11 @@ instance Integral a => Num (TimeSpan a) where
     fromInteger i0 = Pico $ fromIntegral i0
     (-) = withPico (-)
 
+{- | safe to mix sec \/ pico \/ milli
 
--- | safe to mix sec \/ pico \/ milli 
+>>> Sec 1 == Milli 1000
+True
+-} 
 instance (Eq a, Integral a) => Eq (TimeSpan a) where
     (==) (Sec a0) (Sec b0) = a0 == b0
     (==) (Milli a0) (Milli b0) = a0 == b0
@@ -44,7 +51,10 @@ instance (Eq a, Integral a) => Eq (TimeSpan a) where
               b1 = toPico b0::Integer
 
 
--- | safe to mix sec \/ pico \/ milli 
+{- | safe to mix sec \/ pico \/ milli
+
+>>> Sec 1 > Milli 500
+True        -} 
 instance (Ord a, Integral a) => Ord (TimeSpan a) where
     (<=) (Sec a0) (Sec b0) = a0 <= b0
     (<=) (Milli a0) (Milli b0) = a0 <= b0

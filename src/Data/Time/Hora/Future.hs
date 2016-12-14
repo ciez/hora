@@ -43,4 +43,3 @@ instance PicoDiff UTCTime where
 
 instance PicoDiff Pico where
     (-) (MkFixed t2) (MkFixed t1) = Pico $ t2 P.- t1
--- ^ e.g. Pico part in 'DmyHmp' 

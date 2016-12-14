@@ -1,76 +1,111 @@
 module Data.Time.Hora.Timestamp 
     (-- ** numerical
-    now,
+    now, now',
     -- ** string
-    t,
-    t',
+    t, tf,
     dt,
-    d) where
+    d, d') where
 
 import Data.Time.Clock
-import Data.Time.Hora.WithTimeZone
 import Data.Time.Hora.Format
-import Data.Time.Hora.Type.DmyHm
+import Data.Time.Hora.Type.DatePart
 import Data.Time.Hora.Type.Time
 import Data.Time.Hora.Parse
+import Data.Time.LocalTime as L
 
 
-{-| time with Pico in current timezone 
+{-| UTC 
 
 >>> now
-Tz CET (DmyHm {day = 12, month = 12, year = 2016, hour = 19, minute = 33},15.546562180000)
+DatePart {year = 2016, month = 12, day = 14, hour = 9, minute = 7, second = 10, pico = 233275605000}
 -}
-now::IO (Tz DmyHmp)
-now = withTimeZone parse'
+now::IO (DatePart Int)
+now = withUTCTime parse
+
+
+{-| current timezone 
+
+>>> now'
+Tz CET (DatePart {year = 2016, month = 12, day = 14, hour = 10, minute = 7, second = 26, pico = 498313115000})
+-}
+now'::IO (Tz (DatePart Int))
+now' = withTimeZone parse'
 
 
 
-{- | timestamp 
+{- | time.fraction UTC
 
-second.fraction. __UTC__
+>>> tf
+09:10:58.030311306
+-}
+tf::IO String
+tf = do
+      utc0 <- getCurrentTime
+      pure $ formatUTCTime "%T%Q" utc0
+
+
+{- | time UTC
 
 >>> t
-14:41:29.785834836
+09:11:18
 -}
 t::IO String
 t = do
       utc0 <- getCurrentTime
-      pure $ formatUTCTime hmsFraction utc0
+      pure $ formatUTCTime "%T" utc0
 
 
-{- | timestamp 
-
-second.fraction. __UTC__
-
->>> t'
-14:41:29 .785834836
--}
-t'::IO String
-t' = do
-      utc0 <- getCurrentTime
-      pure $ formatUTCTime hmsFraction' utc0
-
-
-{- | date, time (to second)  __UTC__
+{- | date, time  UTC
 
 >>> dt
-2016-12-12 14:43:13
+"2016-12-14 09:16:23"
 -}
 dt::IO String
 dt = do
       utc0 <- getCurrentTime
-      pure $ formatUTCTime ymdHms utc0
+      pure $ formatUTCTime "%F %T" utc0
 
 
 
+{- | date  yyyymmdd   
 
-{- | date stamp /yyyymmdd/   
-
-__local__ timezone
+UTC
 
 >>> d
-Tz CET "20161212"
+"20161214"
 -}
-d::IO (Tz String)
-d = withTimeZone ymd
+d::IO String
+d = withUTCTime ymd
 
+
+{- | date yyyymmdd   
+
+local timezone
+
+>>> d'
+Tz CET "20161214"
+-}
+d'::IO (Tz String)
+d' = withTimeZone ymd'
+
+
+
+type WithLocalTimeZone a = TimeZone -> UTCTime -> Tz a
+type WithUTCTime a = UTCTime -> a
+
+
+{- | do calc with current time zone from 'getCurrentTimeZone'
+
+    probably don't need it
+-}
+withTimeZone::WithLocalTimeZone a -> IO (Tz a)
+withTimeZone fn0 = do
+    z1 <- getCurrentTimeZone    --  CET | CEST
+    t1 <- getCurrentTime
+    pure $ fn0 z1 t1
+
+
+withUTCTime::WithUTCTime a -> IO a
+withUTCTime fn0 = do
+    t1 <- getCurrentTime
+    pure $ fn0 t1

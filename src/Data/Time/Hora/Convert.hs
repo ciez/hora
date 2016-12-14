@@ -1,20 +1,24 @@
 module Data.Time.Hora.Convert 
-    (-- ** multipliers
-    picoSec,
-    picoMs,
-    msSec,
-    -- ** conversion
+    (-- ** 'TimeSpan'
     toPico,
     toMilli,
     toSec,
+    -- ** 'Pico' - 'TimeSpan' conversion
+    picoTimeSpan,
+    timeSpanPico,
     -- ** diff time
     toDiffTime,
-    nominalDiff        
+    nominalDiff,
+    -- ** multipliers
+    picoSec,
+    picoMs,
+    msSec        
     ) where
 
 import Data.Ratio
 import Data.Time.Clock
 import Data.Time.Hora.Type.Time
+import Data.Fixed
 
 
 -- | pico in 1 second
@@ -29,21 +33,22 @@ picoMs = 1000000000         --  9
 msSec::Integral a => a
 msSec = 1000
 
-{- | >>> toPico (Milli 1) 
-    1000000000 -}
+{- | >>> toPico $ Milli 3
+3000000000  -}
 toPico::TwoInt a b => TimeSpan a -> b
 toPico (Pico i0) = fromIntegral i0
 toPico (Milli i0) = fromIntegral $ i0 * picoMs
 toPico (Sec i0) = fromIntegral $ i0 * picoSec
 
-{- | >>> toMilli (Sec 1)
-    1000    -}
+{- | >>> toMilli $ Sec 5
+5000   -}
 toMilli::TwoInt a b => TimeSpan a -> b
 toMilli (Pico i0) = fromIntegral $ i0 `div` picoMs
 toMilli (Milli i0) = fromIntegral $ i0
 toMilli (Sec i0) = fromIntegral $ i0 * msSec
 
-
+{- | >>> toSec $ Milli 781200
+781     -}
 toSec::TwoInt a b => TimeSpan a -> b
 toSec (Pico i0) = fromIntegral $ i0 `div` picoSec
 toSec (Milli i0) = fromIntegral $ i0 `div` msSec
@@ -60,3 +65,12 @@ nominalDiff::Integral a => TimeSpan a -> NominalDiffTime
 nominalDiff ts0 = let s1 = toPico ts0::Integer
                 in fromRational $ s1 % picoSec
 
+
+
+picoTimeSpan::Num a => Pico -> TimeSpan a
+picoTimeSpan (MkFixed p0) = Pico $ fromIntegral p0
+
+
+timeSpanPico::Integral a => TimeSpan a -> Pico 
+timeSpanPico ts0 = MkFixed $ fromIntegral p0
+        where p0 = toPico ts0  
