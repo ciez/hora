@@ -7,6 +7,7 @@ import qualified Test.TestTime as Tt
 import qualified Test.TestPico as P
 import qualified Test.TestPico2 as P2
 import qualified Test.TestDmyHm as D 
+import qualified Test.TestDatePart as Dp 
 
 
 main::IO()
@@ -18,3 +19,4 @@ main = do
         P.main
         D.main
         P2.main
+        Dp.main

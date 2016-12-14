@@ -1,3 +1,8 @@
+#####   1.1.1
+    Bug fix: Ord datePart
+    
+    Timestamp now -> Num
+
 #####   1.1
     API overhaul
     

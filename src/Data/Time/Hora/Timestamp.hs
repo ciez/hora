@@ -19,7 +19,7 @@ import Data.Time.LocalTime as L
 >>> now
 DatePart {year = 2016, month = 12, day = 14, hour = 9, minute = 7, second = 10, pico = 233275605000}
 -}
-now::IO (DatePart Int)
+now::Num a => IO (DatePart a)
 now = withUTCTime parse
 
 
@@ -28,7 +28,7 @@ now = withUTCTime parse
 >>> now'
 Tz CET (DatePart {year = 2016, month = 12, day = 14, hour = 10, minute = 7, second = 26, pico = 498313115000})
 -}
-now'::IO (Tz (DatePart Int))
+now'::Num a => IO (Tz (DatePart a))
 now' = withTimeZone parse'
 
 
