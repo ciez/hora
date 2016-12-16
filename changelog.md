@@ -1,3 +1,6 @@
+#####   2.0.1
+    include test data files
+
 #####   2.0
     *API changes: modules moved & renamed*
     

@@ -1,5 +1,5 @@
 name:                hora
-version:             2.0
+version:             2.0.1
 build-type:          Simple
 cabal-version:       >=1.10
 
@@ -10,7 +10,10 @@ maintainer:          Imants Cekusins
 category:            System, Time
 license:             PublicDomain
 license-file:        PublicDomain
-extra-source-files:  changelog.md, README.md
+extra-source-files:  changelog.md, README.md, 
+                test/TimeSeriesData/ChileContinental,
+                test/TimeSeriesData/ROC
+                
 
 homepage:            https://github.com/ciez/hora
 source-repository   head
