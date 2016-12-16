@@ -1,10 +1,14 @@
 ### hora
 
-    convenience date, time types and functions
+    date, time:
+    
+    convert between UTCTime and date / time parts
+    
+    timezone conversion
     
     timestamps
-    
-    parse UTCTime to explicit type
+
+    typed formats
     
     time in future 
     

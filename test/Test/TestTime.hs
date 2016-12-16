@@ -3,22 +3,19 @@ module Test.TestTime where
 
 import Test.Hspec
 import Debug.Trace
-import Data.Time.Hora.Timestamp
-import Prelude hiding ((<),(>))
+import Data.Time.Hora.Stamp
+import Data.Time.Hora.Some
 
 
 main::IO()
 main = hspec $ do
        describe "Test.TestTime" $ do
           it "timestamp" $ do
-            t >>= traceIO
+            ts t >>= traceIO
             1 `shouldBe` 1
           it "timestamp'" $ do
-            tf >>= traceIO
+            ts tf >>= traceIO
             1 `shouldBe` 1
           it "datetimestamp" $ do
-            dt >>= traceIO
-            1 `shouldBe` 1
-          it "ymd_local" $ do
-            d >>= traceIO . show
+            ts dt >>= traceIO
             1 `shouldBe` 1

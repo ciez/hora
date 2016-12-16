@@ -1,3 +1,15 @@
+#####   2.0
+    *API changes: modules moved & renamed*
+    
+    add DatePart -> UTCTime conversion
+    
+    add TimeZone conversions
+    
+    add Format type
+    
+    merge type modules into 1 module : Type
+
+
 #####   1.1.1
     Bug fix: Ord datePart
     

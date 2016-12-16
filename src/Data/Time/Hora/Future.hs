@@ -1,8 +1,8 @@
 module Data.Time.Hora.Future where
 
 import Data.Time.Clock
-import Data.Time.Hora.Type.Time
-import Data.Time.Hora.Convert
+import Data.Time.Hora.Type
+import Data.Time.Hora.Span
 import Prelude as P
 import Data.Fixed
 
@@ -27,7 +27,7 @@ futureUTCTime ts0 = getCurrentTime >>=
 
 {- | Difference between times with pico precision
     
-    return TimeSpan for ease of conversion with "Data.Time.Hora.Convert"    -}
+return TimeSpan for ease of conversion with "Data.Time.Hora.Span"    -}
 class PicoDiff a where
     (-)::a -> a -> TimeSpan Integer
 

@@ -1,10 +1,10 @@
 name:                hora
-version:             1.1.1
+version:             2.0
 build-type:          Simple
 cabal-version:       >=1.10
 
 synopsis:            date time
-description:         date time functions to pico precision
+description:         pico precision * timestamps * timezones
 author:              Imants Cekusins
 maintainer:          Imants Cekusins
 category:            System, Time
@@ -20,19 +20,22 @@ source-repository   head
 
 library
   exposed-modules:
-          Data.Time.Hora.Convert
+          Data.Time.Hora.Span
           Data.Time.Hora.Future
-          Data.Time.Hora.Timestamp
-          Data.Time.Hora.Type.DatePart
-          Data.Time.Hora.Type.Time
-          Data.Time.Hora.Parse
+          Data.Time.Hora.Stamp
+          Data.Time.Hora.Part
           Data.Time.Hora.Format
-
-  other-modules:            
+          Data.Time.Hora.Type
+          Data.Time.Hora.Zone
+          Data.Time.Hora.Some
+          
+  other-modules:
+              
   ghc-options:  -fwarn-unused-imports  
     
   build-depends:       base >=4.7 && <5.0,
                        time,
+                       timezone-series,
                        binary
                        
   hs-source-dirs:      src
@@ -85,10 +88,16 @@ test-suite spec
           Test.TestPico
           Test.TestPico2
           Test.TestDatePart
+          Test.TestUtc
+          Test.TestZone
+          Test.TestSome
+          Test.TestFormat
 
 
   build-depends:  base >= 4.8,
                   hspec >= 2.1.7,
                   QuickCheck >= 2.8.1,
                   time,
+                  timezone-series,
+                  timezone-olson,
                   binary                          

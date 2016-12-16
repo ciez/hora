@@ -3,7 +3,7 @@ module Test.TestFuture where
 import Test.Hspec
 import Debug.Trace
 import Data.Time.Hora.Future
-import Data.Time.Hora.Type.Time
+import Data.Time.Hora.Type
 import Data.Time.Clock
 
 

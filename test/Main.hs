@@ -8,6 +8,10 @@ import qualified Test.TestPico as P
 import qualified Test.TestPico2 as P2
 import qualified Test.TestDmyHm as D 
 import qualified Test.TestDatePart as Dp 
+import qualified Test.TestUtc as U
+import qualified Test.TestZone as Z
+import qualified Test.TestSome as Tcom 
+import qualified Test.TestFormat as Tf
 
 
 main::IO()
@@ -20,3 +24,7 @@ main = do
         D.main
         P2.main
         Dp.main
+        U.main
+        Z.main
+        Tcom.main
+        Tf.main

@@ -1,8 +1,8 @@
 module Test.TestConvert where
 
 import Test.Hspec
-import Data.Time.Hora.Type.Time
-import Data.Time.Hora.Convert
+import Data.Time.Hora.Type
+import Data.Time.Hora.Span
 import Data.Time.Clock
 
 

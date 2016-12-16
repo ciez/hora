@@ -1,23 +1,23 @@
-module Data.Time.Hora.Convert 
+module Data.Time.Hora.Span 
     (-- ** 'TimeSpan'
     toPico,
     toMilli,
     toSec,
+    -- ** multipliers
+    picoSec,
+    picoMs,
+    msSec,
     -- ** 'Pico' - 'TimeSpan' conversion
     picoTimeSpan,
     timeSpanPico,
     -- ** diff time
     toDiffTime,
-    nominalDiff,
-    -- ** multipliers
-    picoSec,
-    picoMs,
-    msSec        
+    nominalDiff
     ) where
 
 import Data.Ratio
 import Data.Time.Clock
-import Data.Time.Hora.Type.Time
+import Data.Time.Hora.Type
 import Data.Fixed
 
 
@@ -67,7 +67,7 @@ nominalDiff ts0 = let s1 = toPico ts0::Integer
 
 
 
-picoTimeSpan::Num a => Pico -> TimeSpan a
+picoTimeSpan::Integral a => Pico -> TimeSpan a
 picoTimeSpan (MkFixed p0) = Pico $ fromIntegral p0
 
 

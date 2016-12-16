@@ -2,7 +2,7 @@ module Test.TestDatePart where
 
 import Test.Hspec
 import Prelude hiding (until)
-import Data.Time.Hora.Type.DatePart
+import Data.Time.Hora.Type
 default (Int) 
 
 
@@ -21,6 +21,14 @@ main = hspec $ do
           it "Ord" $ do
             now `shouldSatisfy` (< until)
             until `shouldSatisfy` (< stop)
+          it "*" $ do
+            3 * (Sec 10) `shouldBe` (Sec 30)  
+            300 * (Sec 1000) `shouldBe` (Sec 300000)  
+            300 * (Milli 1000) `shouldBe` (Milli 300000)  
+            Milli 300 + (Milli 1000) `shouldBe` (Milli 1300)
+            Sec 1 + (Milli 300) `shouldBe` (Milli 1300)  
+            3 * (Pico 10) `shouldBe` (Pico 30)
+            Milli 397100 + (Sec 2) + 37891470000 `shouldBe` (Milli 397100 + (Sec 2) + (Pico 37891470000))  
 
 
 now::DatePart Int
