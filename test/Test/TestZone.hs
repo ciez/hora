@@ -5,9 +5,10 @@ import Debug.Trace
 import Data.Time.Clock
 import Data.Time.LocalTime.TimeZone.Olson
 import Data.Time.LocalTime.TimeZone.Series
-import Data.Time.Hora.Zone
 import Data.Time.Hora.Stamp
 import Data.Time.Hora.Type
+import Data.Time.Hora.Part
+
 
 main::IO()
 main = hspec $ do
@@ -23,4 +24,4 @@ main = hspec $ do
 
 
 ttz::TimeZoneSeries -> UTCTime -> Tz (DatePart Int)
-ttz = toTimeZone            
+ttz = fromUtc'            

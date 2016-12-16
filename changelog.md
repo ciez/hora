@@ -1,3 +1,11 @@
+#####   2.0.2
+    changes to Data.Time.Hora.Zone:
+    
+        remove redundant  ToTimeZone UTCTime (Tz (DatePart a)) instance: 
+        
+        use Data.Time.Hora.Part fromUtc'
+        
+
 #####   2.0.1
     include test data files
 

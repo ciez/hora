@@ -18,6 +18,8 @@ import Data.Time.LocalTime.TimeZone.Series
 
 {- | serializeable structure for essential Date, Time parts
 
+may also be used to construct 'UTCTime'     
+
 see "Data.Time.Hora.Part" for conversion between 'UTCTime' and 'DatePart'   -}
 data DatePart a = DatePart {
     year::a,
@@ -83,7 +85,7 @@ for conversions between timezones see "Data.Time.Hora.Zone"     -}
 data Tz a = Tz TimeZone a  deriving (Show,Functor)
 
 
--- | 'TimeZone' | 'TimeZoneSeries' 
+-- | 'TimeZone' | 'TimeZoneSeries'
 class Tz' tz where
     tz'::tz -> UTCTime -> TimeZone
 
@@ -92,7 +94,9 @@ instance Tz' TimeZone where
 
 instance Tz' TimeZoneSeries where
     tz' = timeZoneFromSeries
--- ^ see "Data.Time.Hora.Zone" re: 'TimeZoneSeries'
+{- ^ see "Data.Time.Hora.Zone" re: 'TimeZoneSeries'
+
+use of 'TimeZoneSeries' is preferred when converting from 'UTCTime' to 'DatePart' -}
 
 
 {- | second and fractions
