@@ -1,3 +1,6 @@
+#####   2.0.3
+    Tz derive Eq, Ord
+
 #####   2.0.2
     changes to Data.Time.Hora.Zone:
     

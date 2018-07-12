@@ -29,7 +29,7 @@ data DatePart a = DatePart {
     minute::a,
     second::a,
     pico::a     -- ^ excludes seconds. Just fraction as Num    
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Generic)
 
 
 instance Functor DatePart where
@@ -54,6 +54,7 @@ instance Binary (DatePart Integer)
 instance Binary (DatePart String)  
 -- ^ serializeable
 
+deriving instance Eq a => Eq (DatePart a)
 
 instance Ord a => Ord (DatePart a) where
     (<=) a0 b0 =
@@ -83,6 +84,9 @@ data Ord_ = Stop Bool | Continue
     
 for conversions between timezones see "Data.Time.Hora.Zone"     -}
 data Tz a = Tz TimeZone a  deriving (Show,Functor)
+
+deriving instance Eq a => Eq (Tz a) 
+deriving instance Ord a => Ord (Tz a) 
 
 
 -- | 'TimeZone' | 'TimeZoneSeries'
