@@ -70,8 +70,8 @@ data Format =
     | D_wk_0_6   -- ^ day of week number, 0 (= Sunday) - 6 (= Saturday)
     | D_wk      -- ^ day of week short
     | D_week    -- ^ day of week long 
-    | Wk_year_Sun -- ^ week of year start sunday               
-    | Wk_year_Mon -- ^ week of year start sunday
+    | Wk_year_Sun -- ^ week of year start Sunday               
+    | Wk_year_Mon -- ^ week of year start Monday
 
 
 

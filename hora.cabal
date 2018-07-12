@@ -1,10 +1,10 @@
 name:                hora
-version:             2.0.2
+version:             2.0.3
 build-type:          Simple
 cabal-version:       >=1.10
 
 synopsis:            date time
-description:         pico precision * timestamps * timezones * format
+description:         convenient type, timestamp, timezone, format
 author:              Imants Cekusins
 maintainer:          Imants Cekusins
 category:            System, Time
