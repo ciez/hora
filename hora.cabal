@@ -83,18 +83,26 @@ test-suite spec
 
   main-is: Main.hs
   other-modules:
-          Test.TestConvert
-          Test.TestDiffTime
-          Test.TestFuture
-          Test.TestTime
-          Test.TestDmyHm
-          Test.TestPico
-          Test.TestPico2
-          Test.TestDatePart
-          Test.TestUtc
-          Test.TestZone
-          Test.TestSome
-          Test.TestFormat
+           Data.Time.Hora.Format
+           Data.Time.Hora.Future
+           Data.Time.Hora.Part
+           Data.Time.Hora.Some
+           Data.Time.Hora.Span
+           Data.Time.Hora.Stamp
+           Data.Time.Hora.Type
+           Data.Time.Hora.Zone
+           Test.TestConvert
+           Test.TestDiffTime
+           Test.TestFuture
+           Test.TestTime
+           Test.TestDmyHm
+           Test.TestPico
+           Test.TestPico2
+           Test.TestDatePart
+           Test.TestUtc
+           Test.TestZone
+           Test.TestSome
+           Test.TestFormat
 
 
   build-depends:  base >= 4.8,
