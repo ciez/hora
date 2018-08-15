@@ -1,34 +1,48 @@
--- | convert  between 'UTCTime' and 'DatePart'
+-- | convert  between 'UTCTime', 'UTCTimeBin' and 'DatePart'
 module Data.Time.Hora.Part 
-        (fromUtc,fromUtc',
+        (-- * FromUTC
+        FromUTC(..),
+        fromUtc',
+        -- * ToUTC
         ToUTC(..)) where
 
-import Data.Time.Hora.Type
-import Data.Time.Hora.Span
-import Data.Time.Clock
-import Data.Time.Calendar
-import Data.Time.LocalTime as L
 import Data.Fixed
+import Data.Time.Calendar
+import Data.Time.Clock
+import Data.Time.Hora.Span
+import Data.Time.Hora.Type
+import Data.Time.LocalTime as L
 
 
-{- | UTC -}
-fromUtc::Integral a => UTCTime -> DatePart a
-fromUtc t0 = 
-    let day1 = utctDay t0::Day
-        dt1 = utctDayTime t0::DiffTime
-        (y1,m1,d1) = toGregorian day1
-        tod1 = timeToTimeOfDay dt1::TimeOfDay
-        pico4 = todSec tod1::Fixed E12
-        (sec5, MkFixed pico5) = properFraction pico4
-    in DatePart {
-            year = fi y1,
-            month = fi m1,
-            day = fi d1,
-            hour = fi $ todHour tod1,
-            minute = fi $ todMin tod1,
-            second = fi sec5,
-            pico = fi pico5
-            }
+class FromUTC a where
+     fromUtc::UTCTime -> a
+
+-- | returns DatePart a in UTC timezone
+instance Integral a => FromUTC (DatePart a) where
+   fromUtc::Integral a => UTCTime -> DatePart a
+   fromUtc t0 =
+       let day1 = utctDay t0::Day
+           dt1 = utctDayTime t0::DiffTime
+           (y1,m1,d1) = toGregorian day1
+           tod1 = timeToTimeOfDay dt1::TimeOfDay
+           pico4 = todSec tod1::Fixed E12
+           (sec5, MkFixed pico5) = properFraction pico4
+       in DatePart {
+               year = fi y1,
+               month = fi m1,
+               day = fi d1,
+               hour = fi $ todHour tod1,
+               minute = fi $ todMin tod1,
+               second = fi sec5,
+               pico = fi pico5
+               }
+
+
+instance FromUTC UTCTimeBin where
+      fromUtc::UTCTime -> UTCTimeBin
+      fromUtc t0 = UTCTimeBin day1 pico1
+            where day1 = toModifiedJulianDay $ utctDay t0
+                  pico1 = diffTimeToPicoseconds $ utctDayTime t0
 
 
 {- | specified time zone
@@ -93,6 +107,10 @@ instance Integral a => ToUTC (Tz (DatePart a)) where
                     zt1 = ZonedTime lt1 tz0
                 in Just $ zonedTimeToUTC zt1         
 
+instance ToUTC UTCTimeBin where
+        toUtc (UTCTimeBin day0 pico0) = Just $ UTCTime day1 diff1
+            where day1 = ModifiedJulianDay day0
+                  diff1 = picosecondsToDiffTime pico0
 
 fi::TwoInt a b => a -> b
 fi = fromIntegral                

@@ -1,6 +1,8 @@
 module Data.Time.Hora.Type 
     (-- * DatePart  
     DatePart(..),
+    -- * UTCTimeBin
+    UTCTimeBin(..),
     -- * Tz
     Tz(..),
     Tz'(..),
@@ -8,12 +10,11 @@ module Data.Time.Hora.Type
     TimeSpan(..),
     TwoInt(..)) where
 
-
-import GHC.Generics
 import Data.Binary
 import Data.Time.Clock
 import Data.Time.LocalTime
 import Data.Time.LocalTime.TimeZone.Series
+import GHC.Generics
 
 
 {- | serializeable structure for essential Date, Time parts
@@ -77,7 +78,20 @@ instance Ord a => Ord (DatePart a) where
             (Stop b2) -> b2
     
 
+-- private
 data Ord_ = Stop Bool | Continue
+
+{- | This data type closely mimicks UTCTime, has 'Binary' instance
+
+see "Data.Time.Hora.Part" for conversion between 'UTCTime' and 'UTCTimeBin'      -}
+data UTCTimeBin = UTCTimeBin {
+            modifiedJulianDay::Integer,    -- ^ The Modified Julian Day is a standard count of days, with zero being the day 1858-11-17
+            diffTimeAsPicoseconds::Integer   -- ^ the number of picoseconds in a 'DiffTime'
+        }
+        deriving (Eq, Show, Generic)
+
+instance Binary UTCTimeBin
+-- ^ serializeable
 
 
 {-| 'Tz' ('DatePart' a)  parts show local date & time
