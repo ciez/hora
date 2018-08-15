@@ -81,12 +81,14 @@ instance Ord a => Ord (DatePart a) where
 -- private
 data Ord_ = Stop Bool | Continue
 
-{- | This data type closely mimicks UTCTime, has 'Binary' instance
+{- | 'UTCTimeBin' closely mimicks UTCTime.
+
+'UTCTimeBin' has 'Binary' instance. The only purpose of 'UTCTimeBin' is to offer faster conversion and more compact  serialization of 'UTCTime' compared with 'DatePart'.
 
 see "Data.Time.Hora.Part" for conversion between 'UTCTime' and 'UTCTimeBin'      -}
 data UTCTimeBin = UTCTimeBin {
             modifiedJulianDay::Integer,    -- ^ The Modified Julian Day is a standard count of days, with zero being the day 1858-11-17
-            diffTimeAsPicoseconds::Integer   -- ^ the number of picoseconds in a 'DiffTime'
+            diffTimeAsPicoseconds::Integer   -- ^ 'DiffTime' expressed as picoseconds
         }
         deriving (Eq, Show, Generic)
 

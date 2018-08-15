@@ -1,7 +1,7 @@
 #####   2.1.0
     add serializeable UTCTimeBin: close copy of UTCTime. 
     
-    Both are easily convertible without any loss of precision.   
+    UTCTime and UTCTimeBin are easily convertible without loss of precision.   
 
     fromUTC is now a class function. It may be necessary to specify the result type.  
 
