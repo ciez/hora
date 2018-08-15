@@ -81,7 +81,7 @@ instance Ord a => Ord (DatePart a) where
 -- private
 data Ord_ = Stop Bool | Continue
 
-{- | 'UTCTimeBin' closely mimicks UTCTime.
+{- | 'UTCTimeBin' closely mimicks 'UTCTime'.
 
 'UTCTimeBin' has 'Binary' instance. The only purpose of 'UTCTimeBin' is to offer faster conversion and more compact  serialization of 'UTCTime' compared with 'DatePart'.
 
