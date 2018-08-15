@@ -5,7 +5,6 @@
 
     fromUTC is now a class function. It may be necessary to specify the result type.  
 
-#####   2.0.3
     Tz derive Eq, Ord
 
 #####   2.0.2
