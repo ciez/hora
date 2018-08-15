@@ -5,11 +5,11 @@ module Data.Time.Hora.Format
     format,
     format') where
 
-import Data.Time.Format (formatTime,defaultTimeLocale,FormatTime(..))
-import Data.Time.Clock
-import Data.Time.LocalTime as L
-import Data.Time.Hora.Type
 import Data.String
+import Data.Time.Clock
+import Data.Time.Format (formatTime,defaultTimeLocale,FormatTime(..))
+import Data.Time.Hora.Type
+import Data.Time.LocalTime as L
 
 
 -- | format as UTC

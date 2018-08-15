@@ -1,12 +1,12 @@
 module Test.TestDiffTime where
 
-import Test.Hspec
-import Debug.Trace
-import Data.Time.Clock
 import Control.Concurrent
-import Data.Time.Hora.Stamp
+import Data.Time.Clock
 import Data.Time.Hora.Future as F
+import Data.Time.Hora.Stamp
 import Data.Time.Hora.Type
+import Debug.Trace
+import Test.Hspec
 
 
 

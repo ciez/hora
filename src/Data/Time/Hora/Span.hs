@@ -15,10 +15,10 @@ module Data.Time.Hora.Span
     nominalDiff
     ) where
 
+import Data.Fixed
 import Data.Ratio
 import Data.Time.Clock
 import Data.Time.Hora.Type
-import Data.Fixed
 
 
 -- | pico in 1 second

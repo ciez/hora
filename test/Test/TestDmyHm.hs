@@ -1,7 +1,7 @@
 module Test.TestDmyHm where
 
-import Test.Hspec
 import Data.Time.Hora.Type
+import Test.Hspec
 
 
 main::IO()

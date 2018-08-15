@@ -1,8 +1,8 @@
 module Test.TestPico2 where
 
-import Test.Hspec
-import Debug.Trace
 import Data.Fixed
+import Debug.Trace
+import Test.Hspec
 
 
 main::IO()

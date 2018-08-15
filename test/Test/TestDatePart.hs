@@ -1,9 +1,10 @@
 module Test.TestDatePart where
 
-import Test.Hspec
-import Prelude hiding (until)
 import Data.Time.Hora.Type
-default (Int) 
+import Prelude hiding (until)
+import Test.Hspec
+
+default (Int)
 
 
 main::IO()

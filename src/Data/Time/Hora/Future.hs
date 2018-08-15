@@ -1,10 +1,10 @@
 module Data.Time.Hora.Future where
 
-import Data.Time.Clock
-import Data.Time.Hora.Type
-import Data.Time.Hora.Span
-import Prelude as P
 import Data.Fixed
+import Data.Time.Clock
+import Data.Time.Hora.Span
+import Data.Time.Hora.Type
+import Prelude as P
 
 
 {- | 'getCurrentTime' +/- offset

@@ -1,10 +1,10 @@
 module Test.TestFormat where
 
-import Test.Hspec
-import Debug.Trace
-import Data.Time.Hora.Stamp
 import Data.Time.Hora.Format
+import Data.Time.Hora.Stamp
 import Data.Time.Hora.Type
+import Debug.Trace
+import Test.Hspec
 
 
 main::IO()

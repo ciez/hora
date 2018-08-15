@@ -1,11 +1,10 @@
 module Test.TestFuture where
 
-import Test.Hspec
-import Debug.Trace
+import Data.Time.Clock
 import Data.Time.Hora.Future
 import Data.Time.Hora.Type
-import Data.Time.Clock
-
+import Debug.Trace
+import Test.Hspec
 
 
 main::IO()

@@ -1,14 +1,15 @@
 module Test.TestPico where
 
-import Test.Hspec
-import Debug.Trace
-import Data.Time.Hora.Part
-import Data.Time.Hora.Future as F
 import Data.Time.Clock
+import Data.Time.Hora.Future as F
+import Data.Time.Hora.Part
+import Data.Time.Hora.Stamp
 import Data.Time.Hora.Type
 import Data.Time.LocalTime
-import Data.Time.Hora.Stamp
+import Debug.Trace
 import Prelude as P
+import Test.Hspec
+
 
 main::IO()
 main = hspec $ do
@@ -36,4 +37,3 @@ main = hspec $ do
                 diff1 = t2 F.- t1
                 diff2 = pico d2 P.- (pico d1)            
             diff1 `shouldBe` (Pico diff2)
-            

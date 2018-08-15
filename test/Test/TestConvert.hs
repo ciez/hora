@@ -1,9 +1,9 @@
 module Test.TestConvert where
 
-import Test.Hspec
-import Data.Time.Hora.Type
-import Data.Time.Hora.Span
 import Data.Time.Clock
+import Data.Time.Hora.Span
+import Data.Time.Hora.Type
+import Test.Hspec
 
 
 main::IO()

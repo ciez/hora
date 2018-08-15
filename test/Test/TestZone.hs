@@ -1,14 +1,14 @@
 module Test.TestZone where
 
-import Test.Hspec
-import Debug.Trace
 import Data.Time.Clock
-import Data.Time.LocalTime.TimeZone.Olson
-import Data.Time.LocalTime.TimeZone.Series
+import Data.Time.Hora.Part
 import Data.Time.Hora.Stamp
 import Data.Time.Hora.Type
-import Data.Time.Hora.Part
 import Data.Time.Hora.Zone
+import Data.Time.LocalTime.TimeZone.Olson
+import Data.Time.LocalTime.TimeZone.Series
+import Debug.Trace
+import Test.Hspec
 
 
 main::IO()

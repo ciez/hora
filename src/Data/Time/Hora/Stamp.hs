@@ -7,8 +7,8 @@ module Data.Time.Hora.Stamp
 
 import Data.Time.Clock
 import Data.Time.Hora.Format
-import Data.Time.Hora.Type
 import Data.Time.Hora.Part
+import Data.Time.Hora.Type
 import Data.Time.LocalTime as L
 
 
@@ -74,4 +74,3 @@ instance Timestamp (Tz String) where
 -- | timestamp in specified format, 'TimeZone' | 'TimeZoneSeries'
 ts'::Tz' tz => [Format] -> tz -> IO (Tz String)
 ts' lf0 tz0 = withUTCTime $ format' lf0 tz0 
-        
