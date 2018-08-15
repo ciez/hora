@@ -16,7 +16,7 @@ main = hspec $ do
                 `shouldBe` Nothing
           it "round trip" $ do
             now1 <- getCurrentTime
-            let dp1 = fromUtc now1
+            let dp1 = fromUtc now1::DatePart Int
                 Just now2 = toUtc $ traceShow dp1 dp1   
             now1 `shouldBe` now2
           it "round trip local" $ do
@@ -25,4 +25,3 @@ main = hspec $ do
             let dp1 = fromUtc' z1 now1::Tz (DatePart Int)
                 Just now2 = toUtc $ traceShow dp1 dp1
             now1 `shouldBe` now2
-            
