@@ -1,5 +1,5 @@
 name:                hora
-version:             2.0.3
+version:             2.1.0
 build-type:          Simple
 cabal-version:       >=1.10
 
@@ -31,9 +31,7 @@ library
           Data.Time.Hora.Type
           Data.Time.Hora.Zone
           Data.Time.Hora.Some
-          
-  other-modules:
-              
+
   ghc-options:  -fwarn-unused-imports  
     
   build-depends:       base >=4.7 && <5.0,
@@ -103,12 +101,12 @@ test-suite spec
            Test.TestZone
            Test.TestSome
            Test.TestFormat
-
-
+           Test.TestUTCTimeBin
   build-depends:  base >= 4.8,
                   hspec >= 2.1.7,
                   QuickCheck >= 2.8.1,
                   time,
                   timezone-series,
                   timezone-olson,
-                  binary                          
+                  binary,
+                  bytestring
