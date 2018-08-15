@@ -83,7 +83,7 @@ data Ord_ = Stop Bool | Continue
 
 {- | 'UTCTimeBin' closely mimicks 'UTCTime'.
 
-'UTCTimeBin' has 'Binary' instance. The only purpose of 'UTCTimeBin' is to offer faster conversion and more compact  serialization of 'UTCTime' compared with 'DatePart'.
+'UTCTimeBin' has 'Binary' instance. The only purpose of 'UTCTimeBin' is to offer faster conversion from / to 'UTCTime' and more compact  serialization compared with 'DatePart'.
 
 see "Data.Time.Hora.Part" for conversion between 'UTCTime' and 'UTCTimeBin'      -}
 data UTCTimeBin = UTCTimeBin {
