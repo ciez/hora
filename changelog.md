@@ -1,3 +1,10 @@
+#####   2.1.0
+    add serializeable UTCTimeBin: close copy of UTCTime. 
+    
+    Both are easily convertible without any loss of precision.   
+
+    fromUTC is now a class function. It may be necessary to specify the result type.  
+
 #####   2.0.3
     Tz derive Eq, Ord
 
@@ -51,4 +58,3 @@
 
 #####   1.0
     initial version
-        
