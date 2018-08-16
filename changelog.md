@@ -1,3 +1,6 @@
+#####   2.2.0
+    add DatePartSmall
+
 #####   2.1.0
     add serializeable UTCTimeBin: close copy of UTCTime. 
     
