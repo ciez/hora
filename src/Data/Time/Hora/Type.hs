@@ -99,23 +99,48 @@ instance Binary UTCTimeBin
 -- ^ serializeable
 
 
-{- |  'DatePartSmall' uses fixed-size storage
+{- |  'DatePartSmall' uses fixed-size storage. Storage (as encoded with "Data.Binary".encode) varies with the constructor used, is noted as \".. bytes\" against each constructor.
 
-      allows to operate with dates only or time (minute / millisecond precision) only
+      allows to operate with dates only ..
+
+      .. or time (minute / millisecond precision) only
 
       is convenient for dealing with intervals / timespans
 
       day count begins at 1 Jan 0001: 1 Jan 0001 is day 1
 
   -}
-data DatePartSmall = Day Word32  -- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 1. See https://en.wikipedia.org/wiki/Anno_Domini
-               | Min Word16      -- ^ minutes (includes hours)
-               | Ms Word32       -- ^ milliseconds (includes seconds)
-               | Time Word16 Word32  -- ^ minutes, milliseconds
-               | DatePartSmall Word32 Word16 Word32  -- ^ date, minutes, milliseconds
-               | Day' Word32     -- ^ date span in days
-               | Min' Word16     -- ^ time span in minutes
-               | Ms' Word32      -- ^ time span in milliseconds
+data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 1. See https://en.wikipedia.org/wiki/Anno_Domini
+
+   5 bytes     -}
+               | Min Word16      {- ^ minutes (includes hours)
+
+   3 bytes
+                              -}
+               | Ms Word32       {- ^ milliseconds (includes seconds)
+
+5 bytes
+               -}
+               | Time Word16 Word32  {- ^ minutes, milliseconds
+
+   7 bytes
+               -}
+               | DatePartSmall Word32 Word16 Word32  {- ^ date, minutes, milliseconds
+
+               11 bytes
+               -}
+               | Day' Word32     {- ^ date span in days
+
+               5 bytes
+               -}
+               | Min' Word16     {- ^ time span in minutes
+
+               3 bytes
+               -}
+               | Ms' Word32      {- ^ time span in milliseconds
+
+               5 bytes
+               -}
                | Error ErrorDetail  -- ^ result of failed operation
               deriving (Eq, Show, Generic)
 
