@@ -23,11 +23,11 @@ import Data.Time.Hora.Type
 
 -- | pico in 1 second
 picoSec::Integral a => a
-picoSec = 1000000000000     --  12
+picoSec = 1000000000000     --  12 * 0's
 
 -- | pico in 1 milli
 picoMs::Integral a => a
-picoMs = 1000000000         --  9
+picoMs = 1000000000         --  9 * 0's
 
 -- | milli in 1 sec
 msSec::Integral a => a
