@@ -1,9 +1,9 @@
 module Data.Time.Hora.Type 
-    (-- * DatePartSmall
+    (-- * DatePart
+    DatePart(..),
+    -- * DatePartSmall
     DatePartSmall(..),
     ErrorDetail(..),
-    -- * DatePart
-    DatePart(..),
     -- * UTCTimeBin
     UTCTimeBin(..),
     -- * Tz
@@ -105,23 +105,23 @@ instance Binary UTCTimeBin
 
       is convenient for dealing with intervals / timespans
 
-      day count begins at 1 Jan 0001
+      day count begins at 1 Jan 0001: 1 Jan 0001 is day 1
 
   -}
-data DatePartSmall = Day Word32  -- ^ days from 1 Jan 0001
+data DatePartSmall = Day Word32  -- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 1. See https://en.wikipedia.org/wiki/Anno_Domini
                | Min Word16      -- ^ minutes (includes hours)
                | Ms Word32       -- ^ milliseconds (includes seconds)
                | Time Word16 Word32  -- ^ minutes, milliseconds
                | DatePartSmall Word32 Word16 Word32  -- ^ date, minutes, milliseconds
-               | Day' Word32     -- ^ date span
-               | Min' Word16     -- ^ time span
-               | Ms' Word32      -- ^ time span
-               | Error ErrorDetail  -- ^ result of invalid operation
+               | Day' Word32     -- ^ date span in days
+               | Min' Word16     -- ^ time span in minutes
+               | Ms' Word32      -- ^ time span in milliseconds
+               | Error ErrorDetail  -- ^ result of failed operation
               deriving (Eq, Show, Generic)
 
 data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors
                 | Overflow    -- ^ data type maxed out
-                | Invalid_Overflow  -- ^ 'Confused' <> 'Overflow'
+                | Invalid_Overflow  -- ^ 'Invalid' <> 'Overflow'
               deriving (Eq, Show, Generic)
 
 instance Binary ErrorDetail
@@ -173,11 +173,11 @@ instance Semigroup DatePartSmall where
 
    adding span:
 
-   'Day' <> 'Day\''  -> 'Day'
+   'Day' <> 'Day''  -> 'Day'
 
-   'Min' <> 'Min\''  -> 'Min'
+   'Min' <> 'Min''  -> 'Min'
 
-   'Ms' <> 'Ms\''    -> 'Ms'
+   'Ms' <> 'Ms''    -> 'Ms'
 
 
 -}
