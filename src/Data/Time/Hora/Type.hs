@@ -129,37 +129,37 @@ instance Binary DatePartSmall
 
 instance Semigroup DatePartSmall where
 -- combine / merge
-   (<>) (Day d0) (Time m0 ms0) = DatePartSmall d0 m0 ms0
-   (<>) (Min m0) (Ms ms0) = Time m0 ms0
+   (<>) (Day d0) (Time m0 ms0) = DatePartSmall d0 m0 ms0    -- 1
+   (<>) (Min m0) (Ms ms0) = Time m0 ms0                     -- 2
 -- increment
-   (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = DatePartSmall (d0 + d1) m0 ms0  -- todo overflow
-   (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = DatePartSmall d0 (m0 + m1) ms0  -- todo overflow
-   (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = DatePartSmall d0 m0 $ ms0 + ms1 -- todo overflow
-   (<>) (Time m0 ms0) (Min' m1) = Time (m0 + m1) ms0  -- todo overflow
-   (<>) (Time m0 ms0) (Ms' ms1) = Time m0 $ ms0 + ms1 -- todo overflow
-   (<>) (Day m0) (Day' m1) = Day $ m0 + m1   -- todo overflow
-   (<>) (Min m0) (Min' m1) = Min $ m0 + m1   -- todo overflow
-   (<>) (Ms m0) (Ms' m1) = Ms $ m0 + m1   -- todo overflow
+   (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = DatePartSmall (d0 + d1) m0 ms0  -- 3 todo overflow
+   (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = DatePartSmall d0 (m0 + m1) ms0  -- 4 todo overflow
+   (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = DatePartSmall d0 m0 $ ms0 + ms1 -- 5 todo overflow
+   (<>) (Time m0 ms0) (Min' m1) = Time (m0 + m1) ms0  -- 6 todo overflow
+   (<>) (Time m0 ms0) (Ms' ms1) = Time m0 $ ms0 + ms1 -- 7 todo overflow
+   (<>) (Day m0) (Day' m1) = Day $ m0 + m1         -- 8 todo overflow
+   (<>) (Min m0) (Min' m1) = Min $ m0 + m1         -- 9 todo overflow
+   (<>) (Ms m0) (Ms' m1) = Ms $ m0 + m1            -- 10 todo overflow
 -- overwrite
-   (<>) (DatePartSmall _ _ _) (DatePartSmall d1 m1 ms1) = DatePartSmall d1 m1 ms1
-   (<>) (Time _ _) (Time m1 ms1) = Time m1 ms1
-   (<>) (Day _) (Day d1) = Day d1
-   (<>) (Min _) (Min m1) = Min m1
-   (<>) (Ms _) (Ms ms1) = Ms ms1
+   (<>) (DatePartSmall _ _ _) (DatePartSmall d1 m1 ms1) = DatePartSmall d1 m1 ms1      -- 11
+   (<>) (Time _ _) (Time m1 ms1) = Time m1 ms1     -- 12
+   (<>) (Day _) (Day d1) = Day d1                  -- 13
+   (<>) (Min _) (Min m1) = Min m1                  -- 14
+   (<>) (Ms _) (Ms ms1) = Ms ms1                   -- 15
 -- update
-   (<>) (DatePartSmall d0 _ _) (Time m1 ms1) = DatePartSmall d0 m1 ms1
-   (<>) (Time _ ms0) (Min m1) = Time m1 ms0
-   (<>) (Time m0 _) (Ms ms1) = Time m0 ms1
+   (<>) (DatePartSmall d0 _ _) (Time m1 ms1) = DatePartSmall d0 m1 ms1  -- 16
+   (<>) (Time _ ms0) (Min m1) = Time m1 ms0        -- 17
+   (<>) (Time m0 _) (Ms ms1) = Time m0 ms1         -- 18
 -- errors
-   (<>) (Error Invalid) (Error Invalid) = Error Invalid
-   (<>) (Error Invalid) (Error Overflow) = Error Invalid_Overflow
-   (<>) (Error Overflow) (Error Overflow) = Error Overflow
-   (<>) (Error Overflow) (Error Invalid) = Error Invalid_Overflow
-   (<>) (Error Invalid_Overflow) _ = Error Invalid_Overflow
-   (<>) _ (Error Invalid_Overflow) = Error Invalid_Overflow
-   (<>) e0@(Error _) _ = e0
-   (<>) _ e0@(Error _) = e0
-   (<>) _ _ = Error Invalid
+   (<>) (Error Invalid) (Error Invalid) = Error Invalid              -- 19
+   (<>) (Error Invalid) (Error Overflow) = Error Invalid_Overflow    -- 20
+   (<>) (Error Overflow) (Error Overflow) = Error Overflow           -- 21
+   (<>) (Error Overflow) (Error Invalid) = Error Invalid_Overflow    -- 22
+   (<>) (Error Invalid_Overflow) _ = Error Invalid_Overflow          -- 23
+   (<>) _ (Error Invalid_Overflow) = Error Invalid_Overflow          -- 24
+   (<>) e0@(Error _) _ = e0                                          -- 25
+   (<>) _ e0@(Error _) = e0                                          -- 26
+   (<>) _ _ = Error Invalid                                          -- 27
 
 
 {- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
