@@ -29,7 +29,7 @@ data DatePart a = DatePart {
     hour::a,
     minute::a,
     second::a,
-    pico::a     -- ^ excludes seconds. Just fraction as Num    
+    pico::a     -- ^ excludes seconds. Just fraction as Integral
     } deriving (Show, Generic)
 
 
