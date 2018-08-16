@@ -154,7 +154,7 @@ data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 
 
 https://en.wikipedia.org/wiki/Julian_day     -}
 julian_day_offset::Integral a => a
-julian_day_offset = fromIntegral 678578
+julian_day_offset = fromIntegral 678576
 
 
 -- | 'Day'

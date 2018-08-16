@@ -12,8 +12,10 @@ import Test.Hspec
 main::IO()
 main = hspec $ do
    describe "TestDatePartSmall" $ do
-      it "ymd" $ do
-           mkDay 2018 08 16 `shouldBe` (Just $ Day 736924)
+      it "day 1" $ do
+           mkDay 1 1 1 `shouldBe` (Just $ Day 1)
+      it "mkDay" $ do
+           mkDay 2018 08 16 `shouldBe` (Just $ Day 736922)
       it "round trip DatePartSmall <-> UTCTime <-> DatePart" $ do
            let d1 = fromJust $ mkDay 2018 8 16::DatePartSmall
                dt1 = d1 <> Time 0 0::DatePartSmall
@@ -23,5 +25,5 @@ main = hspec $ do
            year dp3 `shouldBe` 2018
            month dp3 `shouldBe` 8
            day dp3 `shouldBe` 16
-           d4 `shouldBe` 736924
+           d4 `shouldBe` 736922
 
