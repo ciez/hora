@@ -14,6 +14,8 @@ main = hspec $ do
    describe "TestDatePartSmall" $ do
       it "day 1" $ do
            mkDay 1 1 1 `shouldBe` (Just $ Day 1)
+      it "Modified Julian day" $ do
+           mkDay 1858 11 17 `shouldBe` (Just $ Day julian_day_offset)
       it "mkDay" $ do
            mkDay 2018 08 16 `shouldBe` (Just $ Day 736922)
       it "round trip DatePartSmall <-> UTCTime <-> DatePart" $ do
