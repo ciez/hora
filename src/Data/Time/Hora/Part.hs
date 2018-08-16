@@ -1,4 +1,4 @@
--- | convert  between 'UTCTime', 'UTCTimeBin' and 'DatePart'
+-- | convert  between 'UTCTime', 'UTCTimeBin', 'DatePart', 'DatePartSmall'
 module Data.Time.Hora.Part 
         (-- * FromUTC
         FromUTC(..),
