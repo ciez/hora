@@ -12,6 +12,7 @@ import Data.Time.Clock
 import Data.Time.Hora.Span
 import Data.Time.Hora.Type
 import Data.Time.LocalTime as L
+import Data.Word
 
 
 class FromUTC a where
@@ -43,6 +44,21 @@ instance FromUTC UTCTimeBin where
       fromUtc t0 = UTCTimeBin day1 pico1
             where day1 = toModifiedJulianDay $ utctDay t0
                   pico1 = diffTimeToPicoseconds $ utctDayTime t0
+
+
+instance FromUTC DatePartSmall where
+      fromUtc::UTCTime -> DatePartSmall
+      fromUtc t0 = DatePartSmall day2 minute2 milli2
+            where dp1 = fromUtc t0::DatePart Int
+                  UTCTimeBin julian1 _ = fromUtc t0::UTCTimeBin
+                  day2 = fromIntegral julian1 + day1_
+                  minute2 = fromIntegral $ hour dp1 * 60 + minute dp1
+                  milli2 = fromSec3 + fromPico3
+                  fromSec3 = toMilli (Sec $ second dp1)::Word32
+                  fromPico3 = toMilli $ Pico $ pico dp1::Word32
+
+day1_::Integral a => a
+day1_ = fromIntegral 678575
 
 
 {- | specified time zone
