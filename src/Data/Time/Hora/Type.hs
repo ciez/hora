@@ -3,6 +3,8 @@ module Data.Time.Hora.Type
     DatePart(..),
     -- * DatePartSmall
     DatePartSmall(..),
+    julian_day_offset,
+    mkDay,
     ErrorDetail(..),
     -- * UTCTimeBin
     UTCTimeBin(..),
@@ -15,6 +17,7 @@ module Data.Time.Hora.Type
 
 import Data.Binary
 import Data.Time.Clock
+import Data.Time.Calendar
 import Data.Time.LocalTime
 import Data.Time.LocalTime.TimeZone.Series
 import GHC.Generics
@@ -109,6 +112,9 @@ instance Binary UTCTimeBin
 
       day count begins at 1 Jan 0001: 1 Jan 0001 is day 1
 
+      see "Data.Time.Hora.Part" for conversion between 'UTCTime' and 'DatePartSmall'
+
+      only values constructed with 'DatePartSmall' can be converted to 'UTCTime'
   -}
 data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 1. See https://en.wikipedia.org/wiki/Anno_Domini
 
@@ -143,6 +149,27 @@ data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 
                -}
                | Error ErrorDetail  -- ^ result of failed operation
               deriving (Eq, Show, Generic)
+
+{- |  Julian day offset
+
+https://en.wikipedia.org/wiki/Julian_day     -}
+julian_day_offset::Integral a => a
+julian_day_offset = fromIntegral 678578
+
+
+-- | 'Day'
+mkDay::Integral a =>
+         a     -- ^ year
+        -> a   -- ^ month
+        -> a   -- ^ day
+        -> Maybe DatePartSmall
+mkDay y0 m0 d0 = valid2 <$> mday1
+   where mday1 = fromGregorianValid y1 m1 d1
+         valid2 = Day . fromIntegral . (+ julian_day_offset) . toModifiedJulianDay
+         y1 = fromIntegral y0
+         m1 = fromIntegral m0
+         d1 = fromIntegral d0
+
 
 data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors
                 | Overflow    -- ^ data type maxed out
