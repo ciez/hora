@@ -96,6 +96,30 @@ instance Binary UTCTimeBin
 -- ^ serializeable
 
 
+{- |  'DatePartSmall' uses fixed-size storage
+
+      allows to operate with dates only or time (minute / millisecond precision) only
+
+      is convenient for dealing with intervals / timespans
+
+      day count begins at 1 Jan 0001
+
+  -}
+data DatePartSmall = Day Word32  -- ^ days from 1 Jan 0001
+               | Min Word16      -- ^ minutes
+               | Ms Word32       -- ^ milliseconds (includes seconds)
+               | TimePart (Word16, Word32)  -- ^ (minutes, milliseconds)
+               | DatePartSmall (Word32, Word16, Word32)  -- ^ (date, minutes, milliseconds)
+               | Day' Word32     -- ^ date span
+               | Min' Word16     -- ^ time span
+               | Ms' Word32      -- ^ time span
+               | Invalid         -- ^ result of invalid operation
+              deriving (Eq, Show, Generic)
+
+instance Binary DatePartSmall
+-- ^ serializeable
+
+
 {-| 'Tz' ('DatePart' a)  parts show local date & time
     
 for conversions between timezones see "Data.Time.Hora.Zone"     -}
