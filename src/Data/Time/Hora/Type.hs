@@ -2,6 +2,7 @@ module Data.Time.Hora.Type
     (-- * DatePartSmall
     DatePartSmall(..),
     ErrorDetail(..),
+    Combine(..), Update(..), Increment(..),
     -- * DatePart
     DatePart(..),
     -- * UTCTimeBin
@@ -109,26 +110,50 @@ instance Binary UTCTimeBin
 
   -}
 data DatePartSmall = Day Word32  -- ^ days from 1 Jan 0001
-               | Min Word16      -- ^ minutes
+               | Min Word16      -- ^ minutes (includes hours)
                | Ms Word32       -- ^ milliseconds (includes seconds)
-               | TimePart (Word16, Word32)  -- ^ (minutes, milliseconds)
+               | Time (Word16, Word32)  -- ^ (minutes, milliseconds)
                | DatePartSmall (Word32, Word16, Word32)  -- ^ (date, minutes, milliseconds)
                | Day' Word32     -- ^ date span
                | Min' Word16     -- ^ time span
                | Ms' Word32      -- ^ time span
-               | Invalid ErrorDetail  -- ^ result of invalid operation
+               | Error ErrorDetail  -- ^ result of invalid operation
               deriving (Eq, Show, Generic)
 
-data ErrorDetail = Confused -- ^ can not determine the intended operation
-                | Overflow  -- ^ data type maxed out
-                | Confused_Overflow  -- ^ 'Confused' <> 'Overflow'
+data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors
+                | Overflow    -- ^ data type maxed out
+                | Invalid_Overflow  -- ^ 'Confused' <> 'Overflow'
               deriving (Eq, Show, Generic)
 
 instance Binary ErrorDetail
 instance Binary DatePartSmall
 
-instance Semigroup DatePartSmall where
-   (<>) _ _ = Invalid Confused
+newtype Combine a = Combine a deriving (Functor)
+newtype Update a = Update a deriving (Functor)
+newtype Increment a = Increment a deriving (Functor)
+
+instance Semigroup (Combine DatePartSmall) where
+   (<>) (Combine (Day d0)) (Combine (Time (m0, ms0))) = Combine $ DatePartSmall (d0, m0, ms0)
+   (<>) (Combine t0@(Time _)) (Combine d0@(Day _)) = Combine d0 <> (Combine t0)
+{- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
+   to add date/time span to the existing parts
+
+   combining parts:
+
+   'Day' <> 'Time' -> 'DatePartSmall'
+
+   'Min' <> 'Ms' -> 'Time'
+
+   adding span:
+
+   'Day' <> 'Day\''  -> 'Day'
+
+   'Min' <> 'Min\''  -> 'Min'
+
+   'Ms' <> 'Ms\''    -> 'Ms'
+
+
+-}
 
 
 {-| 'Tz' ('DatePart' a)  parts show local date & time

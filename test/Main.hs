@@ -14,6 +14,7 @@ import qualified Test.TestTime as Tt
 import qualified Test.TestUTCTimeBin as Bin
 import qualified Test.TestZone as Z
 import qualified Test.TestAncientDate as A
+import qualified Test.TestDatePartSmall as Sm
 
 main::IO()
 main = do
@@ -31,3 +32,4 @@ main = do
         Tf.main
         Bin.main
         A.main
+        Sm.main
