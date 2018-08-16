@@ -13,7 +13,7 @@ import qualified Test.TestFormat as Tf
 import qualified Test.TestTime as Tt
 import qualified Test.TestUTCTimeBin as Bin
 import qualified Test.TestZone as Z
-
+import qualified Test.TestAncientDate as A
 
 main::IO()
 main = do
@@ -30,3 +30,4 @@ main = do
         Tcom.main
         Tf.main
         Bin.main
+        A.main
