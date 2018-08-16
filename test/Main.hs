@@ -18,6 +18,8 @@ import qualified Test.TestDatePartSmall as Sm
 import qualified Test.TestStorageSize as Sto
 import qualified Test.TestDatePartSmallConvert as Smc
 import qualified Test.TestRoundtripPicoMilli as Pm
+import qualified Test.TestDatePartSmallDoc as Smd
+
 
 main::IO()
 main = do
@@ -39,3 +41,4 @@ main = do
         Sto.main
         Smc.main
         Pm.main
+        Smd.main

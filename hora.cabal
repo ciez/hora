@@ -107,6 +107,7 @@ test-suite spec
            Test.TestStorageSize
            Test.TestDatePartSmallConvert
            Test.TestRoundtripPicoMilli
+           Test.TestDatePartSmallDoc
   build-depends:  base >= 4.8,
                   hspec >= 2.1.7,
                   QuickCheck >= 2.8.1,
