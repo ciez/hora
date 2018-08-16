@@ -16,6 +16,8 @@ import qualified Test.TestZone as Z
 import qualified Test.TestAncientDate as A
 import qualified Test.TestDatePartSmall as Sm
 import qualified Test.TestStorageSize as Sto
+import qualified Test.TestDatePartSmallConvert as Smc
+import qualified Test.TestRoundtripPicoMilli as Pm
 
 main::IO()
 main = do
@@ -35,3 +37,5 @@ main = do
         A.main
         Sm.main
         Sto.main
+        Smc.main
+        Pm.main

@@ -6,6 +6,7 @@ module Data.Time.Hora.Part
         -- * ToUTC
         ToUTC(..)) where
 
+import Data.Ratio
 import Data.Fixed
 import Data.Time.Calendar
 import Data.Time.Clock
@@ -13,7 +14,6 @@ import Data.Time.Hora.Span
 import Data.Time.Hora.Type
 import Data.Time.LocalTime as L
 import Data.Word
-
 
 class FromUTC a where
      fromUtc::UTCTime -> a
@@ -25,9 +25,7 @@ instance Integral a => FromUTC (DatePart a) where
        let day1 = utctDay t0::Day
            dt1 = utctDayTime t0::DiffTime
            (y1,m1,d1) = toGregorian day1
-           tod1 = timeToTimeOfDay dt1::TimeOfDay
-           pico4 = todSec tod1::Fixed E12
-           (sec5, MkFixed pico5) = properFraction pico4
+           (tod1, sec5, pico5) = todSecPico dt1
        in DatePart {
                year = fi y1,
                month = fi m1,
@@ -39,11 +37,27 @@ instance Integral a => FromUTC (DatePart a) where
                }
 
 
+-- | extract (TimeIfDay, seconds, picoseconds) from 'DiffTime'
+todSecPico::Integral a => DiffTime -> (TimeOfDay, a, Integer)
+todSecPico dt0 = (tod1, sec5, pico5)
+   where tod1 = timeToTimeOfDay dt0::TimeOfDay
+         pico4 = todSec tod1::Fixed E12
+         (sec5, MkFixed pico5) = properFraction pico4
+
+
+diffTime::Int        -- ^ hour
+        -> Int       -- ^ minute
+        -> Fixed E12   -- ^ pico
+        -> DiffTime
+diffTime h0 m0 p0 = timeOfDayToTime tod1
+      where tod1 = TimeOfDay h0 m0 p0
+
+
 instance FromUTC UTCTimeBin where
       fromUtc::UTCTime -> UTCTimeBin
       fromUtc t0 = UTCTimeBin day1 pico1
             where day1 = toModifiedJulianDay $ utctDay t0
-                  pico1 = diffTimeToPicoseconds $ utctDayTime t0
+                  pico1 =  diffTimeToPicoseconds $ utctDayTime t0
 
 
 instance FromUTC DatePartSmall where
@@ -51,12 +65,14 @@ instance FromUTC DatePartSmall where
       fromUtc t0 = DatePartSmall day2 minute2 milli2
             where dp1 = fromUtc t0::DatePart Int
                   UTCTimeBin julian1 _ = fromUtc t0::UTCTimeBin
-                  day2 = fromIntegral julian1 + day1_
-                  minute2 = fromIntegral $ hour dp1 * 60 + minute dp1
+                  day2 = fi julian1 + day1_
+                  minute2 = fi $ hour dp1 * 60 + minute dp1
                   milli2 = fromSec3 + fromPico3
                   fromSec3 = toMilli (Sec $ second dp1)::Word32
                   fromPico3 = toMilli $ Pico $ pico dp1::Word32
 
+
+-- | to convert <> Julian calendar
 day1_::Integral a => a
 day1_ = fromIntegral 678575
 
@@ -123,10 +139,28 @@ instance Integral a => ToUTC (Tz (DatePart a)) where
                     zt1 = ZonedTime lt1 tz0
                 in Just $ zonedTimeToUTC zt1         
 
+
 instance ToUTC UTCTimeBin where
-        toUtc (UTCTimeBin day0 pico0) = Just $ UTCTime day1 diff1
-            where day1 = ModifiedJulianDay day0
-                  diff1 = picosecondsToDiffTime pico0
+     toUtc (UTCTimeBin day0 pico0) = Just $ UTCTime day1 diff1
+         where day1 = ModifiedJulianDay day0
+               diff1 = picosecondsToDiffTime pico0
+
+
+instance ToUTC DatePartSmall where
+   toUtc (DatePartSmall d0 m0 ms0) = Just utc1
+        where utc1 = UTCTime day2 diff2
+              day1 = fi d0 - day1_::Integer
+              day2 = ModifiedJulianDay day1
+              diff2 = diffTime hr1 min1 pico2
+              min1 = fi $ m0 `rem` 60
+              hr1 = fi $ m0 `div` 60
+              sec1 = fi $ ms0 `div` 1000
+              sec2 = MkFixed $ sec1 * picoSec::Fixed E12
+              ms1 = fi ms0::Integer
+              pico1 = fromRational $ (ms1 `rem` 1000) % 1000::Fixed E12
+              pico2 = sec2 + pico1
+   toUtc _ = Nothing
+
 
 fi::TwoInt a b => a -> b
 fi = fromIntegral                

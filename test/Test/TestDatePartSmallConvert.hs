@@ -19,4 +19,4 @@ main = hspec $ do
              Just utc2 = toUtc small1
              span3 = utc2 F.- now1::TimeSpan Integer
          traceIO $ show small1
-         span3 `shouldSatisfy` (< Milli 1)
+         abs span3 `shouldSatisfy` (< (Milli 1))
