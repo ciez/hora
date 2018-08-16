@@ -150,6 +150,16 @@ instance Semigroup DatePartSmall where
    (<>) (DatePartSmall d0 _ _) (Time m1 ms1) = DatePartSmall d0 m1 ms1
    (<>) (Time _ ms0) (Min m1) = Time m1 ms0
    (<>) (Time m0 _) (Ms ms1) = Time m0 ms1
+-- errors
+   (<>) (Error Invalid) (Error Invalid) = Error Invalid
+   (<>) (Error Invalid) (Error Overflow) = Error Invalid_Overflow
+   (<>) (Error Overflow) (Error Overflow) = Error Overflow
+   (<>) (Error Overflow) (Error Invalid) = Error Invalid_Overflow
+   (<>) (Error Invalid_Overflow) _ = Error Invalid_Overflow
+   (<>) _ (Error Invalid_Overflow) = Error Invalid_Overflow
+   (<>) e0@(Error _) _ = e0
+   (<>) _ e0@(Error _) = e0
+   (<>) _ _ = Error Invalid
 
 
 {- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
