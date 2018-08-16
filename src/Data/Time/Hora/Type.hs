@@ -112,6 +112,8 @@ instance Binary UTCTimeBin
 
       day count begins at 1 Jan 0001: 1 Jan 0001 is day 1
 
+      max date is: 11759222-01-19. That's 19 Jan 11759222
+
       see "Data.Time.Hora.Part" for conversion between 'UTCTime' and 'DatePartSmall'
 
       only values constructed with 'DatePartSmall' can be converted to 'UTCTime'

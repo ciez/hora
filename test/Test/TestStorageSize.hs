@@ -26,6 +26,11 @@ main = hspec $ do
              bin2 = encode result1
          tr1 "Day 10 size is " bin2
          size1 bin2  `shouldBe` 5
+      it "Day max" $ do
+         let result1 = Day (maxBound::Word32)
+             bin2 = encode result1
+         tr1 "Day max size is " bin2
+         size1 bin2  `shouldBe` 5
       it "Ms 10" $ do
          let result1 = Ms 10
              bin2 = encode result1
