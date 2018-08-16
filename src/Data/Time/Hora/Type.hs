@@ -2,7 +2,6 @@ module Data.Time.Hora.Type
     (-- * DatePartSmall
     DatePartSmall(..),
     ErrorDetail(..),
-    Combine(..), Update(..), Increment(..),
     -- * DatePart
     DatePart(..),
     -- * UTCTimeBin
@@ -112,8 +111,8 @@ instance Binary UTCTimeBin
 data DatePartSmall = Day Word32  -- ^ days from 1 Jan 0001
                | Min Word16      -- ^ minutes (includes hours)
                | Ms Word32       -- ^ milliseconds (includes seconds)
-               | Time (Word16, Word32)  -- ^ (minutes, milliseconds)
-               | DatePartSmall (Word32, Word16, Word32)  -- ^ (date, minutes, milliseconds)
+               | Time Word16 Word32  -- ^ minutes, milliseconds
+               | DatePartSmall Word32 Word16 Word32  -- ^ date, minutes, milliseconds
                | Day' Word32     -- ^ date span
                | Min' Word16     -- ^ time span
                | Ms' Word32      -- ^ time span
@@ -128,13 +127,31 @@ data ErrorDetail = Invalid    -- ^ operation is not possible with these construc
 instance Binary ErrorDetail
 instance Binary DatePartSmall
 
-newtype Combine a = Combine a deriving (Functor)
-newtype Update a = Update a deriving (Functor)
-newtype Increment a = Increment a deriving (Functor)
+instance Semigroup DatePartSmall where
+-- combine / merge
+   (<>) (Day d0) (Time m0 ms0) = DatePartSmall d0 m0 ms0
+   (<>) (Min m0) (Ms ms0) = Time m0 ms0
+-- increment
+   (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = DatePartSmall (d0 + d1) m0 ms0  -- todo overflow
+   (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = DatePartSmall d0 (m0 + m1) ms0  -- todo overflow
+   (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = DatePartSmall d0 m0 $ ms0 + ms1 -- todo overflow
+   (<>) (Time m0 ms0) (Min' m1) = Time (m0 + m1) ms0  -- todo overflow
+   (<>) (Time m0 ms0) (Ms' ms1) = Time m0 $ ms0 + ms1 -- todo overflow
+   (<>) (Day m0) (Day' m1) = Day $ m0 + m1   -- todo overflow
+   (<>) (Min m0) (Min' m1) = Min $ m0 + m1   -- todo overflow
+   (<>) (Ms m0) (Ms' m1) = Ms $ m0 + m1   -- todo overflow
+-- overwrite
+   (<>) (DatePartSmall _ _ _) (DatePartSmall d1 m1 ms1) = DatePartSmall d1 m1 ms1
+   (<>) (Time _ _) (Time m1 ms1) = Time m1 ms1
+   (<>) (Day _) (Day d1) = Day d1
+   (<>) (Min _) (Min m1) = Min m1
+   (<>) (Ms _) (Ms ms1) = Ms ms1
+-- update
+   (<>) (DatePartSmall d0 _ _) (Time m1 ms1) = DatePartSmall d0 m1 ms1
+   (<>) (Time _ ms0) (Min m1) = Time m1 ms0
+   (<>) (Time m0 _) (Ms ms1) = Time m0 ms1
 
-instance Semigroup (Combine DatePartSmall) where
-   (<>) (Combine (Day d0)) (Combine (Time (m0, ms0))) = Combine $ DatePartSmall (d0, m0, ms0)
-   (<>) (Combine t0@(Time _)) (Combine d0@(Day _)) = Combine d0 <> (Combine t0)
+
 {- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
    to add date/time span to the existing parts
 
