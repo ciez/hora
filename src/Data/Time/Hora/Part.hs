@@ -65,16 +65,13 @@ instance FromUTC DatePartSmall where
       fromUtc t0 = DatePartSmall day2 minute2 milli2
             where dp1 = fromUtc t0::DatePart Int
                   UTCTimeBin julian1 _ = fromUtc t0::UTCTimeBin
-                  day2 = fi julian1 + day1_
+                  day2 = fi julian1 + julian_day_offset
                   minute2 = fi $ hour dp1 * 60 + minute dp1
                   milli2 = fromSec3 + fromPico3
                   fromSec3 = toMilli (Sec $ second dp1)::Word32
                   fromPico3 = toMilli $ Pico $ pico dp1::Word32
 
 
--- | to convert <> Julian calendar
-day1_::Integral a => a
-day1_ = fromIntegral 678575
 
 
 {- | specified time zone
@@ -149,7 +146,7 @@ instance ToUTC UTCTimeBin where
 instance ToUTC DatePartSmall where
    toUtc (DatePartSmall d0 m0 ms0) = Just utc1
         where utc1 = UTCTime day2 diff2
-              day1 = fi d0 - day1_::Integer
+              day1 = fi d0 - julian_day_offset::Integer
               day2 = ModifiedJulianDay day1
               diff2 = diffTime hr1 min1 pico2
               min1 = fi $ m0 `rem` 60
