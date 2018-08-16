@@ -9,14 +9,14 @@ import Test.Hspec
 main::IO()
 main = hspec $ do
    describe "day way in the past" $ do
-      it "year 0" $ do
-         traceIO $ "year 0: " <> (show utc1)
-         traceIO $ "year 0: " <> (show utcbin1)
+      it "year 1" $ do
+         traceIO $ "year 1: " <> (show utc1)
+         traceIO $ "year 1: " <> (show utcbin1)
          1 `shouldBe` 1
       it "year 500" $ do
          isJust utc2 `shouldBe` True
          dp3 `shouldBe` (dp1 500)
-        where utc1 = fromJust $ toUtc $ dp1 0
+        where utc1 = fromJust $ toUtc $ dp1 1
               utcbin1 = fromUtc utc1::UTCTimeBin
               dp1 y1 = DatePart {
                         year = y1,
