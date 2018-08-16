@@ -32,20 +32,26 @@ main = hspec $ do
          tr1 "Time 1 2 size is " bin2
          1 `shouldBe` 1
       it "DatePartSmall 10 2 1" $ do
-         let result10 = DatePartSmall 10 2 1
-             bin11 = encode result10
-         tr1 "DatePartSmall size is " bin11
+         let result1 = DatePartSmall 10 2 1
+             bin2 = encode result1
+         tr1 "DatePartSmall size is " bin2
          1 `shouldBe` 1
       it "DatePartSmall from now" $ do
          now20 <- now::IO UTCTime
-         let result21 = fromUtc now20::DatePartSmall
-             bin22 = encode result21
-         tr1 "DatePartSmall size is " bin22
+         let result1 = fromUtc now20::DatePartSmall
+             bin1 = encode result1
+         tr1 "DatePartSmall now size is " bin1
+         let result2 = fromUtc now20::UTCTimeBin
+             bin2 = encode result2
+         tr1 "UTCTimeBin now size is " bin2
+         let result3 = fromUtc now20::DatePart Int
+             bin3 = encode result3
+         tr1 "DatePart Int now size is " bin3
          1 `shouldBe` 1
       it "Int64" $ do
-         let result21 = 10::Int64
-             bin22 = encode result21
-         tr1 "Int64 size is " bin22
+         let result1 = 10::Int64
+             bin2 = encode result1
+         tr1 "Int64 size is " bin2
          1 `shouldBe` 1
      where tr1 desc1 bin1 = traceIO $ desc1 <> (show $ B.length $ B.concat $ L.toChunks bin1)
 
