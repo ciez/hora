@@ -15,6 +15,7 @@ import qualified Test.TestUTCTimeBin as Bin
 import qualified Test.TestZone as Z
 import qualified Test.TestAncientDate as A
 import qualified Test.TestDatePartSmall as Sm
+import qualified Test.TestStorageSize as Sto
 
 main::IO()
 main = do
@@ -33,3 +34,4 @@ main = do
         Bin.main
         A.main
         Sm.main
+        Sto.main
