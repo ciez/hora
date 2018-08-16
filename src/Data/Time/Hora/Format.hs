@@ -8,7 +8,7 @@ module Data.Time.Hora.Format
 import Data.String
 import Data.Time.Clock
 import Data.Time.Format (formatTime,defaultTimeLocale,FormatTime(..))
-import Data.Time.Hora.Type
+import Data.Time.Hora.Type hiding (Min)
 import Data.Time.LocalTime as L
 
 

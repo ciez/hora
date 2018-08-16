@@ -1,5 +1,8 @@
 module Data.Time.Hora.Type 
-    (-- * DatePart  
+    (-- * DatePartSmall
+    DatePartSmall(..),
+    ErrorDetail(..),
+    -- * DatePart
     DatePart(..),
     -- * UTCTimeBin
     UTCTimeBin(..),
@@ -113,11 +116,19 @@ data DatePartSmall = Day Word32  -- ^ days from 1 Jan 0001
                | Day' Word32     -- ^ date span
                | Min' Word16     -- ^ time span
                | Ms' Word32      -- ^ time span
-               | Invalid         -- ^ result of invalid operation
+               | Invalid ErrorDetail  -- ^ result of invalid operation
               deriving (Eq, Show, Generic)
 
+data ErrorDetail = Confused -- ^ can not determine the intended operation
+                | Overflow  -- ^ data type maxed out
+                | Confused_Overflow  -- ^ 'Confused' <> 'Overflow'
+              deriving (Eq, Show, Generic)
+
+instance Binary ErrorDetail
 instance Binary DatePartSmall
--- ^ serializeable
+
+instance Semigroup DatePartSmall where
+   (<>) _ _ = Invalid Confused
 
 
 {-| 'Tz' ('DatePart' a)  parts show local date & time
