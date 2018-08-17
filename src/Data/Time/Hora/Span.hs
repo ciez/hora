@@ -10,11 +10,6 @@ module Data.Time.Hora.Span
     -- ** 'Pico' - 'TimeSpan' conversion
     picoTimeSpan,
     timeSpanPico,
-    -- ** 'DatePartSmall'
-    mkDay,
-    mkMin,
-    mkMs,
-    julian_day_offset,
     -- ** diff time
     toDiffTime,
     nominalDiff
@@ -22,7 +17,6 @@ module Data.Time.Hora.Span
 
 import Data.Fixed
 import Data.Ratio
-import Data.Time.Calendar
 import Data.Time.Clock
 import Data.Time.Hora.Type
 
@@ -80,40 +74,3 @@ picoTimeSpan (MkFixed p0) = Pico $ fromIntegral p0
 timeSpanPico::Integral a => TimeSpan a -> Pico 
 timeSpanPico ts0 = MkFixed $ fromIntegral p0
         where p0 = toPico ts0
-
-
-{- |  Julian day offset
-
-https://en.wikipedia.org/wiki/Julian_day     -}
-julian_day_offset::Integral a => a
-julian_day_offset = fromIntegral 678576
-
--- | day / date
-mkDay::Integral a =>
-         a     -- ^ year
-        -> a   -- ^ month
-        -> a   -- ^ day
-        -> DatePartSmall   -- ^ 'Day'
-mkDay y0 m0 d0 = maybe (Error Invalid) id mday2
-   where mday2 = valid2 <$> mday1::Maybe DatePartSmall
-         mday1 = fromGregorianValid y1 m1 d1
-         valid2 = Day . fromIntegral . (+ julian_day_offset) . toModifiedJulianDay
-         y1 = fromIntegral y0
-         m1 = fromIntegral m0
-         d1 = fromIntegral d0
-
-
--- | minutes including hours
-mkMin::(Num a, Integral a) =>
-        a      -- ^ hour
-        -> a   -- ^ minute
-        -> DatePartSmall   -- ^ 'Min'
-mkMin h0 m0 = Min $ fromIntegral $ h0 * 60 + m0
-
-
--- | milliseconds including seconds
-mkMs::(Num a, Integral a) =>
-        a      -- ^ second
-        -> a   -- ^ millisecond
-        -> DatePartSmall   -- ^ 'Ms'
-mkMs s0 ms0 = Ms $ fromIntegral $ toMilli (Sec s0) + ms0
