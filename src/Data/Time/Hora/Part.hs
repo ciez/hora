@@ -214,7 +214,7 @@ mkMs s0 ms0 = Ms $ fromIntegral $ toMilli (Sec s0) + ms0
 
       ! does not change the constructor. 'Time' remains 'Time'
 
-      this function is called by 'toUTC' before the conversion
+      this function is called by 'toUtc' before the conversion
 -}
 normalize::DatePartSmall -> DatePartSmall
 normalize dp0
