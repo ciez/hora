@@ -3,9 +3,6 @@ module Data.Time.Hora.Type
     DatePart(..),
     -- * DatePartSmall
     DatePartSmall(..),
-    julian_day_offset,
-    mkDay,
-    mkMin,
     ErrorDetail(..),
     -- * UTCTimeBin
     UTCTimeBin(..),
@@ -18,7 +15,6 @@ module Data.Time.Hora.Type
 
 import Data.Binary
 import Data.Time.Clock
-import Data.Time.Calendar
 import Data.Time.LocalTime
 import Data.Time.LocalTime.TimeZone.Series
 import GHC.Generics
@@ -152,33 +148,6 @@ data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 
                -}
                | Error ErrorDetail  -- ^ result of failed operation
               deriving (Eq, Show, Generic)
-
-{- |  Julian day offset
-
-https://en.wikipedia.org/wiki/Julian_day     -}
-julian_day_offset::Integral a => a
-julian_day_offset = fromIntegral 678576
-
-
-mkDay::Integral a =>
-         a     -- ^ year
-        -> a   -- ^ month
-        -> a   -- ^ day
-        -> DatePartSmall   -- ^ 'Day'
-mkDay y0 m0 d0 = maybe (Error Invalid) id mday2
-   where mday2 = valid2 <$> mday1::Maybe DatePartSmall
-         mday1 = fromGregorianValid y1 m1 d1
-         valid2 = Day . fromIntegral . (+ julian_day_offset) . toModifiedJulianDay
-         y1 = fromIntegral y0
-         m1 = fromIntegral m0
-         d1 = fromIntegral d0
-
-
-mkMin::(Num a, Integral a) =>
-        a      -- ^ hour
-        -> a   -- ^ minute
-        -> DatePartSmall   -- ^ 'Min'
-mkMin h0 m0 = Min $ fromIntegral $ h0 * 60 + m0
 
 
 data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors

@@ -1,13 +1,14 @@
 module Test.TestDatePartSmallDoc where
 
 import Data.Maybe
-import Data.Word
 import Data.Semigroup hiding (Min)
 import Data.Time.Clock
 import Data.Time.Hora.Part
+import Data.Time.Hora.Span
 import Data.Time.Hora.Type
-import Prelude
+import Data.Word
 import Debug.Trace
+import Prelude
 import Test.Hspec
 
 
