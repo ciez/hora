@@ -4,7 +4,7 @@ import Data.Maybe
 import Data.Semigroup hiding (Min)
 import Data.Time.Clock
 import Data.Time.Hora.Part
-import Data.Time.Hora.Some
+import Data.Time.Hora.Format
 import Data.Time.Hora.Type
 import Data.Word
 import Debug.Trace

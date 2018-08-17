@@ -2,7 +2,6 @@ module Test.TestFormat where
 
 import Data.Time.Hora.Format
 import Data.Time.Hora.Part
-import Data.Time.Hora.Some
 import Data.Time.Hora.Stamp
 import Data.Time.Hora.Type as T
 import Debug.Trace
