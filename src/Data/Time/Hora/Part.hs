@@ -225,24 +225,19 @@ normalize::DatePartSmall -> DatePartSmall
 normalize dp0
    | (Time m1 ms1) <- dp0,
          ms2::Int <- fi ms1,
-         sec1 <- toSec (Milli ms2),
+         sec1 <- ts ms2,
          sec1 >= 60
-            = let m2 = fi m1::Int
-                  m3 = (sec1 `div` 60) + m2
+            = let m3 = (sec1 `div` 60) + (fi m1::Int)
                   sec2 = sec1 `rem` 60
-                  ms3_1 = toMilli $ Sec sec2
-                  ms3_3 = toMilli $ Sec sec1
-                  ms3 = ms3_1 + ms2 - ms3_3
+                  ms3 = (tm sec2) + ms2 - (tm sec1)
               in Time (fi m3) $ fi ms3
 
    | (DatePartSmall d1 m1 ms1) <- dp0,
-         ms2 <- fi ms1::Int,
-         sec1 <- toSec (Milli ms2),
+         ms2::Int <- fi ms1,
+         sec1 <- ts ms2,
          sec1 >= 60
-            = let m2 = (sec1 `div` 60) + (fi m1::Int)
-                  sec2 = sec1 `rem` 60
-                  ms3 = toMilli (Sec sec2) + ms2 - (toMilli $ Sec sec1)
-              in normalize $ DatePartSmall d1 (fi m2) $ fi ms3
+            = let Time m2 ms2 = normalize $ Time m1 ms1
+              in normalize $ DatePartSmall d1 m2 ms2
 
    | (DatePartSmall d1 m1 ms1) <- dp0,
          m2 <- fi m1::Int,
@@ -254,3 +249,9 @@ normalize dp0
               in DatePartSmall (fi d2) (fi m3) ms1
 
    | otherwise = dp0
+
+tm::Integral a => a -> a
+tm = toMilli . Sec
+
+ts::Integral a => a -> a
+ts = toSec . Milli
