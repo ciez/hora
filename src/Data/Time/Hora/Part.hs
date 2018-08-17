@@ -22,6 +22,7 @@ import Data.Time.Hora.Span
 import Data.Time.Hora.Type
 import Data.Time.LocalTime as L
 import Data.Word
+import Debug.Trace
 
 class FromUTC a where
      fromUtc::UTCTime -> a
@@ -170,7 +171,12 @@ instance ToUTC DatePartSmall where
 
 {- |  Julian day offset
 
-https://en.wikipedia.org/wiki/Julian_day     -}
+https://en.wikipedia.org/wiki/Julian_day
+
+>>> mkDay 1 1 1 `shouldBe` (Day 1)
+
+>>> mkDay 1858 11 17 `shouldBe` (Day julian_day_offset)
+-}
 julian_day_offset::Integral a => a
 julian_day_offset = fromIntegral 678576
 
@@ -219,18 +225,22 @@ mkMs s0 ms0 = Ms $ fromIntegral $ toMilli (Sec s0) + ms0
 normalize::DatePartSmall -> DatePartSmall
 normalize dp0
    | (Time m1 ms1) <- dp0,
-         sec1 <- toSec (Milli ms1),
+         ms2::Int <- fi ms1,
+         sec1 <- toSec (Milli ms2),
          sec1 >= 60
-            = let m2 = sec1 `div` 60 + m1
+            = let m2 = fi m1::Int
+                  m3 = (sec1 `div` 60) + m2
                   sec2 = sec1 `rem` 60
-                  ms3 = toMilli (Sec sec2) + ms1 - (toMilli $ Sec sec1)
-              in Time m2 ms3
+                  ms3_1 = toMilli $ Sec $ tr "sec2" sec2
+                  ms3_3 = toMilli $ Sec $ tr "sec1" sec1
+                  ms3 = tr "ms3_1" ms3_1 + (tr "ms1" ms2) - (tr "ms3_3" ms3_3)
+              in Time (fi m3) $ tr "ms3" $ fi ms3
 
    | (DatePartSmall d1 m1 ms1) <- dp0,
          ms2 <- fi ms1::Int,
          sec1 <- toSec (Milli ms2),
          sec1 >= 60
-            = let m2 = sec1 `div` 60 + (fi m1::Int)
+            = let m2 = (sec1 `div` 60) + (fi m1::Int)
                   sec2 = sec1 `rem` 60
                   ms3 = toMilli (Sec sec2) + ms2 - (toMilli $ Sec sec1)
               in normalize $ DatePartSmall d1 (fi m2) $ fi ms3
@@ -246,3 +256,5 @@ normalize dp0
 
    | otherwise = dp0
 
+
+tr desc1 val1 = traceShow ("normalize#256", desc1, val1) val1

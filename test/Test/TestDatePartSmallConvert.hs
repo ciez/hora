@@ -25,6 +25,8 @@ main = hspec $ do
       it "normalize DatePartSmall" $ do
          normalize (Time 0 $ toMilli $ Sec 62) `shouldBe` (Time 1 $ toMilli $ Sec 2)
          normalize (DatePartSmall 0 (60 * 24 + 10) $ toMilli $ Sec 62) `shouldBe` (DatePartSmall 1 11 $ toMilli $ Sec 2)
+         (mkMin 14 59 <> mkMs 132 9 <> Ms' 5300) `shouldBe` (mkMin 14 59) <> (mkMs 132 5309)
+         normalize (mkMin 14 59 <> mkMs 132 9 <> Ms' 5300) `shouldBe` (mkMin 15 1) <> (mkMs 17 309)
       it "increment DatePartSmall by 1 day in minutes" $ do
          now1 <- now::IO UTCTime
          let small1 = fromUtc now1::DatePartSmall
