@@ -172,6 +172,12 @@ instance Semigroup DatePartSmall where
 
 >>> show' $ normalize $ mkMin 14 59 <> mkMs 132 9 <> Ms' 5308
 15:01:17.317
+
+when incrementing and decrementing, overflow is checked on both upper (max for Word16, Word32) and lower (0) bounds
+
+when incrementing, it is possible to normalize time by recalculating minutes from seconds, days from minutes. See 'normalize' in "Data.Time.Hora.Part"
+
+when decrementing, normalization is not yet implemented. todo
 -}
 
 incrDecr::(Int -> Int -> Int)  -- ^ op (+) (-)
