@@ -113,6 +113,8 @@ test-suite spec
            Test.TestDatePartSmallDoc
            Data.Time.Hora.Internal.Span
            Data.Time.Hora.Internal.DatePartSmall
+           Test.TestCheckOverflow
+
   build-depends:  base >= 4.8,
                   hspec >= 2.1.7,
                   QuickCheck >= 2.8.1,

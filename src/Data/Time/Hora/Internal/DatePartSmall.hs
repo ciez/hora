@@ -155,8 +155,8 @@ instance Semigroup DatePartSmall where
 -}
 
 checkOverflow::forall a b. (Bounded a, Integral a, Num a) =>
-   (a -> DatePartSmall)
-   -> (Int -> Int -> Int)
+   (a -> DatePartSmall)    -- ^ ctor
+   -> (Int -> Int -> Int)  -- ^ op (+) (-)
    -> a
    -> a
    -> DatePartSmall

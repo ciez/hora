@@ -19,10 +19,11 @@ import qualified Test.TestStorageSize as Sto
 import qualified Test.TestDatePartSmallConvert as Smc
 import qualified Test.TestRoundtripPicoMilli as Pm
 import qualified Test.TestDatePartSmallDoc as Smd
-
+import qualified Test.TestCheckOverflow as Of
 
 main::IO()
 main = do
+        Of.main
         T.main
         Conv.main
         Fut.main
