@@ -155,12 +155,16 @@ instance Semigroup DatePartSmall where
 -}
 
 checkOverflow::forall a b. (Bounded a, Integral a, Num a) =>
-   (Int -> Int -> Int) -> a -> a -> Maybe a
-checkOverflow fn0 a1 a2 =
+   (a -> DatePartSmall)
+   -> (Int -> Int -> Int)
+   -> a
+   -> a
+   -> DatePartSmall
+checkOverflow ctor0 fn0 a1 a2 =
          if result1 >= min_aInt1
                && result1 <= max_aInt1
-               then Just $ fi result1
-               else Nothing
+               then ctor0 $ fi result1
+               else Error Overflow
    where b1 = fi a1::Int
          b2 = fi a2::Int
          min_a1 = minBound::a
