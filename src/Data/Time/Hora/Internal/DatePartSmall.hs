@@ -141,6 +141,23 @@ instance Semigroup DatePartSmall where
    (<>) _ e0@(Error _) = e0                                          -- 26
    (<>) _ _ = Error Invalid                                          -- 27
 
+{- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
+   to add date/time span to the existing parts
+
+   combining parts:
+
+   'Day' <> 'Time' -> 'DatePartSmall'
+
+   'Min' <> 'Ms' -> 'Time'
+
+   adding span:
+
+   'Day' <> 'Day''  -> 'Day'
+
+   'Min' <> 'Min''  -> 'Min'
+
+   'Ms' <> 'Ms''    -> 'Ms'
+-}
 
 incrDecr::(Int -> Int -> Int)  -- ^ op (+) (-)
                      -> DatePartSmall
@@ -197,25 +214,7 @@ incrDecr op0 dp1 dp2
                   | otherwise = Error Invalid
 
 
-{- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
-   to add date/time span to the existing parts
 
-   combining parts:
-
-   'Day' <> 'Time' -> 'DatePartSmall'
-
-   'Min' <> 'Ms' -> 'Time'
-
-   adding span:
-
-   'Day' <> 'Day''  -> 'Day'
-
-   'Min' <> 'Min''  -> 'Min'
-
-   'Ms' <> 'Ms''    -> 'Ms'
-
-
--}
 
 checkOverflow::forall a b. (Bounded a, Integral a, Num a) =>
    (a -> DatePartSmall)    -- ^ ctor

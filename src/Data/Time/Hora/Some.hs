@@ -43,6 +43,36 @@ dt = [Y_m_d, Raw " ", Hms]
 {- | pretty print 'DatePartSmall'
 
 incremental values are prefixed with + or -
+
+>>> show' $ mkDay 2018 08 17
+    2018-08-17
+
+>>> show' $ mkMin 4 3
+    04:03
+
+>>> show' $ mkMs 7 318
+    07.318
+
+>>> let (Day d1) = mkDay 2018 08 17
+        (Min m1) = mkMin 15 17
+        (Ms ms1) = mkMs 7 358
+    show' $ DatePartSmall d1 m1 ms1
+    2018-08-17 15:17:07.358
+
+>>>  show' $ Day' 3
+     +3 days
+
+>>> show' $ toSpan $ mkMin 0 53
+    +00:53
+
+>>> show' $ toSpan $ mkMs 7 0
+    +07.000
+
+>>> show' $ T.negate $ Day' 3
+    -3 days
+
+>>> show' $ T.negate $ toSpan $ mkMin 14 53
+    -14:53
 -}
 show'::DatePartSmall -> String
 show' dp0
