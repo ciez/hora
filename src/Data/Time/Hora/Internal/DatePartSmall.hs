@@ -148,15 +148,30 @@ instance Semigroup DatePartSmall where
 
    'Day' <> 'Time' -> 'DatePartSmall'
 
+>>> show' (mkDay 2018 08 20 <> mkMin 10 2 <> mkMs 30 9)
+2018-08-20 10:02:30.009
+
    'Min' <> 'Ms' -> 'Time'
 
    adding span:
 
    'Day' <> 'Day''  -> 'Day'
 
+>>> show' (mkDay 2018 1 1 <> Day' 20)
+2018-01-21
+
+>>> show' (mkDay 2018 1 1 <> Day' 180)
+2018-06-30
+
    'Min' <> 'Min''  -> 'Min'
 
+>>> show' (mkMin 3 15 <> Min' 200)
+06:35
+
    'Ms' <> 'Ms''    -> 'Ms'
+
+>>> show' $ normalize $ mkMin 14 59 <> mkMs 132 9 <> Ms' 5308
+15:01:17.317
 -}
 
 incrDecr::(Int -> Int -> Int)  -- ^ op (+) (-)
