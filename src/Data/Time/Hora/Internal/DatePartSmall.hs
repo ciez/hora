@@ -102,25 +102,19 @@ instance Semigroup DatePartSmall where
    (<>) (Min m0) (Ms ms0) = Time m0 ms0                     -- 2
 
 -- increment
-   (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = checkOverflow
-         (\d2 -> DatePartSmall d2 m0 ms0) d0 (+) d1  -- 3
+   (<>) d1@(DatePartSmall _ _ _) d2@(Day' _) = incrDecr (+) d1 d2 -- 3
+   (<>) d1@(DatePartSmall d0 m0 ms0) d2@(Min' m1) = incrDecr (+) d1 d2 -- 4
+   (<>) d1@(DatePartSmall d0 m0 ms0) d2@(Ms' ms1) = incrDecr (+) d1 d2 -- 5
+   (<>) d1@(Time m0 ms0) d2@(Min' m1) = incrDecr (+) d1 d2  -- 6
+   (<>) d1@(Time m0 ms0) d2@(Ms' ms1) = incrDecr (+) d1 d2   -- 7
 
-   (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = checkOverflow
-         (\m2 -> DatePartSmall d0 (m0 + m1) ms0) m0 (+) m1 -- 4
+   (<>) d1@(Day m0) d2@(Day' m1) = incrDecr (+) d1 d2     -- 8
+   (<>) d1@(Min m0) d2@(Min' m1) = incrDecr (+) d1 d2     -- 9
+   (<>) d1@(Ms m0) d2@(Ms' m1) = incrDecr (+) d1 d2        -- 10
 
-   (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = checkOverflow
-         (DatePartSmall d0 m0) ms0 (+) ms1 -- 5
-
-   (<>) (Time m0 ms0) (Min' m1) = checkOverflow (\m2 -> Time m2 ms0) m0 (+) m1  -- 6
-   (<>) (Time m0 ms0) (Ms' ms1) = checkOverflow (Time m0) ms0 (+) ms1   -- 7
-
-   (<>) (Day m0) (Day' m1) = checkOverflow Day m0 (+) m1     -- 8
-   (<>) (Min m0) (Min' m1) = checkOverflow Min m0 (+) m1     -- 9
-   (<>) (Ms m0) (Ms' m1) = checkOverflow Ms m0 (+) m1        -- 10
-
-   (<>) (Day' m0) (Day' m1) = checkOverflow Day' m0 (+) m1   -- 8
-   (<>) (Min' m0) (Min' m1) = checkOverflow Min' m0 (+) m1   -- 9
-   (<>) (Ms' m0) (Ms' m1) = checkOverflow Ms' m0 (+) m1      -- 10
+   (<>) d1@(Day' m0) d2@(Day' m1) = incrDecr (+) d1 d2   -- 8
+   (<>) d1@(Min' m0) d2@(Min' m1) = incrDecr (+) d1 d2   -- 9
+   (<>) d1@(Ms' m0) d2@(Ms' m1) = incrDecr (+) d1 d2      -- 10
 
 -- decrement
 
@@ -145,6 +139,61 @@ instance Semigroup DatePartSmall where
    (<>) e0@(Error _) _ = e0                                          -- 25
    (<>) _ e0@(Error _) = e0                                          -- 26
    (<>) _ _ = Error Invalid                                          -- 27
+
+
+incrDecr::(Int -> Int -> Int)  -- ^ op (+) (-)
+                     -> DatePartSmall
+                     -> DatePartSmall
+                     -> DatePartSmall
+incrDecr op0 dp1 dp2
+                  | (DatePartSmall d0 m0 ms0) <- dp1,
+                     (Day' d1) <- dp2
+                        = checkOverflow
+                              (\d2 -> DatePartSmall d2 m0 ms0) d0 op0 d1  -- 3
+
+                  | (DatePartSmall d0 m0 ms0) <- dp1,
+                     (Min' m1) <- dp2
+                        = checkOverflow
+                              (\m2 -> DatePartSmall d0 (m0 + m1) ms0) m0 op0 m1 -- 4
+
+                  | (DatePartSmall d0 m0 ms0) <- dp1,
+                     (Ms' ms1) <- dp2
+                        = checkOverflow
+                              (DatePartSmall d0 m0) ms0 op0 ms1 -- 5
+
+                  | (Time m0 ms0) <- dp1,
+                        (Min' m1) <- dp2
+                           = checkOverflow (\m2 -> Time m2 ms0) m0 op0 m1  -- 6
+
+                  | (Time m0 ms0) <- dp1,
+                     (Ms' ms1) <- dp2
+                           = checkOverflow (Time m0) ms0 op0 ms1   -- 7
+
+                  | (Day m0) <- dp1,
+                        (Day' m1) <- dp2
+                           = checkOverflow Day m0 op0 m1     -- 8
+
+                  | (Min m0) <- dp1,
+                        (Min' m1) <- dp2
+                           = checkOverflow Min m0 op0 m1     -- 9
+
+                  | (Ms m0) <- dp1,
+                        (Ms' m1) <- dp2
+                           = checkOverflow Ms m0 op0 m1        -- 10
+
+                  | (Day' m0) <- dp1,
+                        (Day' m1) <- dp2
+                           = checkOverflow Day' m0 op0 m1   -- 8
+
+                  | (Min' m0) <- dp1,
+                        (Min' m1) <- dp2
+                           = checkOverflow Min' m0 op0 m1   -- 9
+
+                  | (Ms' m0) <- dp1,
+                        (Ms' m1) <- dp2
+                           = checkOverflow Ms' m0 op0 m1      -- 10
+
+                  | otherwise = Error Invalid
 
 
 {- ^ '<>' can be used both to combine parts (e.g. 'Day', 'Time') and
