@@ -17,6 +17,7 @@ module Data.Time.Hora.Type
 
 import Data.Binary
 import Data.Time.Clock
+import Data.Time.Hora.Internal.Span
 import Data.Time.LocalTime
 import Data.Time.LocalTime.TimeZone.Series
 import GHC.Generics
@@ -190,15 +191,25 @@ instance Semigroup DatePartSmall where
 -- combine / merge
    (<>) (Day d0) (Time m0 ms0) = DatePartSmall d0 m0 ms0    -- 1
    (<>) (Min m0) (Ms ms0) = Time m0 ms0                     -- 2
+
 -- increment
    (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = DatePartSmall (d0 + d1) m0 ms0  -- 3 todo overflow
    (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = DatePartSmall d0 (m0 + m1) ms0  -- 4 todo overflow
    (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = DatePartSmall d0 m0 $ ms0 + ms1 -- 5 todo overflow
    (<>) (Time m0 ms0) (Min' m1) = Time (m0 + m1) ms0  -- 6 todo overflow
    (<>) (Time m0 ms0) (Ms' ms1) = Time m0 $ ms0 + ms1 -- 7 todo overflow
+
    (<>) (Day m0) (Day' m1) = Day $ m0 + m1         -- 8 todo overflow
    (<>) (Min m0) (Min' m1) = Min $ m0 + m1         -- 9 todo overflow
    (<>) (Ms m0) (Ms' m1) = Ms $ m0 + m1            -- 10 todo overflow
+
+   (<>) (Day' m0) (Day' m1) = Day' $ m0 + m1         -- 8 todo overflow
+   (<>) (Min' m0) (Min' m1) = Min' $ m0 + m1         -- 9 todo overflow
+   (<>) (Ms' m0) (Ms' m1) = Ms' $ m0 + m1            -- 10 todo overflow
+
+-- decrement
+
+
 -- overwrite
    (<>) (DatePartSmall _ _ _) (DatePartSmall d1 m1 ms1) = DatePartSmall d1 m1 ms1      -- 11
    (<>) (Time _ _) (Time m1 ms1) = Time m1 ms1     -- 12
@@ -265,16 +276,6 @@ instance Tz' TimeZoneSeries where
 use of 'TimeZoneSeries' is preferred when converting from 'UTCTime' to 'DatePart' -}
 
 
-{- | second and fractions
-
-see "Data.Time.Hora.Span" for conversion    -}
-data TimeSpan a = Sec a
-                | Pico a
-                | Milli a deriving (Show, Functor)
-
-
--- | constraint
-type TwoInt a b = (Integral a, Integral b)
 
 
 {- | ! fromInteger returns 'Pico'. assumes the value is Pico seconds
@@ -322,27 +323,3 @@ instance (Ord a, Integral a) => Ord (TimeSpan a) where
         where a1 = toPico a0::Integer
               b1 = toPico b0::Integer
 
-
-withPico::Integral a => (a -> a -> a) ->
-    TimeSpan a -> TimeSpan a -> TimeSpan a
-withPico fn0 a0 b0 = Pico $ fn0 a1 b1
-        where a1 = toPico a0
-              b1 = toPico b0
-
-
-{- | >>> toPico (Milli 1) 
-    1000000000 -}
-toPico::TwoInt a b => TimeSpan a -> b
-toPico (Pico i0) = fromIntegral i0
-toPico (Milli i0) = fromIntegral $ i0 * picoMs
-toPico (Sec i0) = fromIntegral $ i0 * picoSec
-
-
-
--- | pico in 1 second
-picoSec::Integral a => a
-picoSec = 1000000000000     --  12
-
--- | pico in 1 milli
-picoMs::Integral a => a
-picoMs = 1000000000         --  9               

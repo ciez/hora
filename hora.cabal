@@ -32,6 +32,9 @@ library
           Data.Time.Hora.Zone
           Data.Time.Hora.Some
 
+  other-modules:
+          Data.Time.Hora.Internal.Span
+
   ghc-options:  -fwarn-unused-imports  
     
   build-depends:       base >=4.7 && <5.0,
@@ -108,6 +111,7 @@ test-suite spec
            Test.TestDatePartSmallConvert
            Test.TestRoundtripPicoMilli
            Test.TestDatePartSmallDoc
+           Data.Time.Hora.Internal.Span
   build-depends:  base >= 4.8,
                   hspec >= 2.1.7,
                   QuickCheck >= 2.8.1,
