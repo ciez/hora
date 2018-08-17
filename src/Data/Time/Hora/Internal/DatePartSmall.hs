@@ -155,7 +155,7 @@ incrDecr op0 dp1 dp2
                   | (DatePartSmall d0 m0 ms0) <- dp1,
                      (Min' m1) <- dp2
                         = checkOverflow
-                              (\m2 -> DatePartSmall d0 (m0 + m1) ms0) m0 op0 m1 -- 4
+                              (\m2 -> DatePartSmall d0 m2 ms0) m0 op0 m1 -- 4
 
                   | (DatePartSmall d0 m0 ms0) <- dp1,
                      (Ms' ms1) <- dp2
