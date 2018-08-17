@@ -12,10 +12,11 @@ module Data.Time.Hora.Part
         julian_day_offset
          ) where
 
-import Data.Ratio
 import Data.Fixed
+import Data.Ratio
 import Data.Time.Calendar
 import Data.Time.Clock
+import Data.Time.Hora.Internal.Span
 import Data.Time.Hora.Span
 import Data.Time.Hora.Type
 import Data.Time.LocalTime as L
@@ -201,7 +202,3 @@ mkMs::(Num a, Integral a) =>
         -> a   -- ^ millisecond
         -> DatePartSmall   -- ^ 'Ms'
 mkMs s0 ms0 = Ms $ fromIntegral $ toMilli (Sec s0) + ms0
-
-
-fi::TwoInt a b => a -> b
-fi = fromIntegral                

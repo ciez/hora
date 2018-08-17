@@ -10,6 +10,8 @@ data TimeSpan a = Sec a
 -- | constraint
 type TwoInt a b = (Integral a, Integral b)
 
+fi::TwoInt a b => a -> b
+fi = fromIntegral
 
 withPico::Integral a => (a -> a -> a) ->
     TimeSpan a -> TimeSpan a -> TimeSpan a

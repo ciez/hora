@@ -1,9 +1,9 @@
 module Data.Time.Hora.Internal.DatePartSmall where
 
 import Data.Binary
+import Data.Time.Hora.Internal.Span
 import GHC.Generics
 import Prelude hiding (negate)
-
 
 {- |  'DatePartSmall' uses fixed-size storage. Storage (as encoded with "Data.Binary".encode) varies with the constructor used, is noted as \".. bytes\" against each constructor.
 
@@ -154,3 +154,17 @@ instance Semigroup DatePartSmall where
 
 -}
 
+checkOverflow::forall a b. (Bounded a, Integral a, Num a) =>
+   (Int -> Int -> Int) -> a -> a -> Maybe a
+checkOverflow fn0 a1 a2 =
+         if result1 >= min_aInt1
+               && result1 <= max_aInt1
+               then Just $ fi result1
+               else Nothing
+   where b1 = fi a1::Int
+         b2 = fi a2::Int
+         min_a1 = minBound::a
+         min_aInt1 = fi min_a1::Int
+         max_a1 = maxBound::a
+         max_aInt1 = fi max_a1::Int
+         result1 = fn0 b1 b2::Int
