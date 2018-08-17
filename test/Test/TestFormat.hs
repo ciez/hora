@@ -53,7 +53,7 @@ main = hspec $ do
             show' (toSpan $ mkMin 14 53) `shouldBe` "+14:53"
             show' (toSpan $ mkMin 0 53) `shouldBe` "+00:53"
           it "Ms'" $ do
-            show' (toSpan $ mkMs 7 358) `shouldBe` "+07.358"
+            show' (toSpan $ mkMs 7 0) `shouldBe` "+07.000"
           it "Neg Day'" $ do
             show' (T.negate $ Day' 3) `shouldBe` "-3 days"
           it "Neg Min'" $ do
@@ -61,6 +61,7 @@ main = hspec $ do
             show' (T.negate $ toSpan $ mkMin 0 53) `shouldBe` "-00:53"
           it "Neg Ms'" $ do
             show' (T.negate $ toSpan $ mkMs 7 358) `shouldBe` "-07.358"
+            show' (T.negate $ toSpan $ mkMs 0 0) `shouldBe` "-00.000"
 
 
 utc::Tz String -> IO()
