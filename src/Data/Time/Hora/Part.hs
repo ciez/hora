@@ -22,7 +22,6 @@ import Data.Time.Hora.Span
 import Data.Time.Hora.Type
 import Data.Time.LocalTime as L
 import Data.Word
-import Debug.Trace
 
 class FromUTC a where
      fromUtc::UTCTime -> a
@@ -231,10 +230,10 @@ normalize dp0
             = let m2 = fi m1::Int
                   m3 = (sec1 `div` 60) + m2
                   sec2 = sec1 `rem` 60
-                  ms3_1 = toMilli $ Sec $ tr "sec2" sec2
-                  ms3_3 = toMilli $ Sec $ tr "sec1" sec1
-                  ms3 = tr "ms3_1" ms3_1 + (tr "ms1" ms2) - (tr "ms3_3" ms3_3)
-              in Time (fi m3) $ tr "ms3" $ fi ms3
+                  ms3_1 = toMilli $ Sec sec2
+                  ms3_3 = toMilli $ Sec sec1
+                  ms3 = ms3_1 + ms2 - ms3_3
+              in Time (fi m3) $ fi ms3
 
    | (DatePartSmall d1 m1 ms1) <- dp0,
          ms2 <- fi ms1::Int,
@@ -255,6 +254,3 @@ normalize dp0
               in DatePartSmall (fi d2) (fi m3) ms1
 
    | otherwise = dp0
-
-
-tr desc1 val1 = traceShow ("normalize#256", desc1, val1) val1
