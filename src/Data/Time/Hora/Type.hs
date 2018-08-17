@@ -5,6 +5,7 @@ module Data.Time.Hora.Type
     DatePartSmall(Day, Min, Ms, Time, DatePartSmall, Day', Min', Ms', Error),
     toSpan,
     negate,
+    isNegative,
     ErrorDetail(..),
     -- * UTCTimeBin
     UTCTimeBin(..),

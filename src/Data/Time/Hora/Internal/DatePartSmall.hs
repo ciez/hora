@@ -80,6 +80,11 @@ negate dp0 = case dp0 of
                Ms' ms1 -> Neg dp0
                otherwise -> dp0
 
+-- | checks if 'DatePartSmall' is a negative span
+isNegative::DatePartSmall -> Bool
+isNegative dp0 = case dp0 of
+                     (Neg _) -> True
+                     otherwise -> False
 
 data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors
                 | Overflow    -- ^ data type maxed out
