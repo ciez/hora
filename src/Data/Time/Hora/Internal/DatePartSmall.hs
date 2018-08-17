@@ -117,7 +117,8 @@ instance Semigroup DatePartSmall where
    (<>) d1@(Ms' m0) d2@(Ms' m1) = incrDecr (+) d1 d2      -- 10
 
 -- decrement
-
+   (<>) (Neg d1) (Neg d2) = negate $ incrDecr (+) d1 d2
+   (<>) d1 (Neg d2) = incrDecr (-) d1 d2
 
 -- overwrite
    (<>) (DatePartSmall _ _ _) (DatePartSmall d1 m1 ms1) = DatePartSmall d1 m1 ms1      -- 11
