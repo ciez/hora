@@ -9,6 +9,7 @@ module Data.Time.Hora.Part
         mkDay,
         mkMin,
         mkMs,
+        normalize,
         julian_day_offset
          ) where
 
@@ -151,8 +152,9 @@ instance ToUTC UTCTimeBin where
 
 
 instance ToUTC DatePartSmall where
-   toUtc (DatePartSmall d0 m0 ms0) = Just utc1
-        where utc1 = UTCTime day2 diff2
+   toUtc dp0@(DatePartSmall _ _ _) = Just utc1
+        where (DatePartSmall d0 m0 ms0) = normalize dp0
+              utc1 = UTCTime day2 diff2
               day1 = fi d0 - julian_day_offset::Integer
               day2 = ModifiedJulianDay day1
               diff2 = diffTime hr1 min1 pico2
@@ -202,3 +204,45 @@ mkMs::(Num a, Integral a) =>
         -> a   -- ^ millisecond
         -> DatePartSmall   -- ^ 'Ms'
 mkMs s0 ms0 = Ms $ fromIntegral $ toMilli (Sec s0) + ms0
+
+
+{- |  for ('Time', 'DatePartSmall') increase:
+
+      minutes if seconds > 60
+
+      days if minutes > 24 * 60
+
+      ! does not change the constructor. 'Time' remains 'Time'
+
+      this function is called by 'toUTC' before the conversion
+-}
+normalize::DatePartSmall -> DatePartSmall
+normalize dp0
+   | (Time m1 ms1) <- dp0,
+         sec1 <- toSec (Milli ms1),
+         sec1 >= 60
+            = let m2 = sec1 `div` 60 + m1
+                  sec2 = sec1 `rem` 60
+                  ms3 = toMilli (Sec sec2) + ms1 - (toMilli $ Sec sec1)
+              in Time m2 ms3
+
+   | (DatePartSmall d1 m1 ms1) <- dp0,
+         ms2 <- fi ms1::Int,
+         sec1 <- toSec (Milli ms2),
+         sec1 >= 60
+            = let m2 = sec1 `div` 60 + (fi m1::Int)
+                  sec2 = sec1 `rem` 60
+                  ms3 = toMilli (Sec sec2) + ms2 - (toMilli $ Sec sec1)
+              in normalize $ DatePartSmall d1 (fi m2) $ fi ms3
+
+   | (DatePartSmall d1 m1 ms1) <- dp0,
+         m2 <- fi m1::Int,
+         hr1 <- m2 `div` 60,
+         hr1 >= 24
+            = let d2 = hr1 `div` 24 + (fi d1)
+                  hr2 = hr1 `rem` 24
+                  m3 = m2 `rem` 60 + hr2 * 60
+              in DatePartSmall (fi d2) (fi m3) ms1
+
+   | otherwise = dp0
+
