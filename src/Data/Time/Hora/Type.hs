@@ -2,7 +2,9 @@ module Data.Time.Hora.Type
     (-- * DatePart
     DatePart(..),
     -- * DatePartSmall
-    DatePartSmall(..),
+    DatePartSmall(Day, Min, Ms, Time, DatePartSmall, Day', Min', Ms', Error),
+    toSpan,
+    negate,
     ErrorDetail(..),
     -- * UTCTimeBin
     UTCTimeBin(..),
@@ -18,6 +20,7 @@ import Data.Time.Clock
 import Data.Time.LocalTime
 import Data.Time.LocalTime.TimeZone.Series
 import GHC.Generics
+import Prelude hiding (negate)
 
 
 {- | serializeable structure for essential Date, Time parts
@@ -146,8 +149,33 @@ data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 
 
                5 bytes
                -}
+               | Neg DatePartSmall  -- ^ negate. Hidden constructor
                | Error ErrorDetail  -- ^ result of failed operation
               deriving (Eq, Show, Generic)
+
+
+{- | 'Day' -> 'Day''
+
+   'Min' -> 'Min''
+
+   'Ms' -> 'Ms''
+-}
+toSpan::DatePartSmall -> DatePartSmall
+toSpan dp0 = case dp0 of
+               Day d1 -> Day' d1
+               Min m1 -> Min' m1
+               Ms ms1 -> Ms' ms1
+               otherwise -> dp0
+
+{- | adds hidden Neg constructor to 'Day'', 'Min'' or 'Ms''
+to enable negative spans   -}
+negate::DatePartSmall -> DatePartSmall
+negate dp0 = case dp0 of
+               Neg dp1 -> dp1
+               Day' d1 -> Neg dp0
+               Min' m1 -> Neg dp0
+               Ms' ms1 -> Neg dp0
+               otherwise -> dp0
 
 
 data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors
