@@ -57,7 +57,9 @@ data DatePartSmall = Day Word32  {- ^ days after 31 Dec 1 BC: 1 Jan AD 1 is day 
               deriving (Eq, Show, Generic)
 
 
-{- | 'Day' -> 'Day''
+{- | substitutes constructor:
+
+   'Day' -> 'Day''
 
    'Min' -> 'Min''
 
