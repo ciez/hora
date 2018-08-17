@@ -106,13 +106,13 @@ instance Semigroup DatePartSmall where
    (<>) (Time m0 ms0) (Min' m1) = Time (m0 + m1) ms0  -- 6 todo overflow
    (<>) (Time m0 ms0) (Ms' ms1) = Time m0 $ ms0 + ms1 -- 7 todo overflow
 
-   (<>) (Day m0) (Day' m1) = Day $ m0 + m1         -- 8 todo overflow
-   (<>) (Min m0) (Min' m1) = Min $ m0 + m1         -- 9 todo overflow
-   (<>) (Ms m0) (Ms' m1) = Ms $ m0 + m1            -- 10 todo overflow
+   (<>) (Day m0) (Day' m1) = checkOverflow Day m0 (+) m1     -- 8
+   (<>) (Min m0) (Min' m1) = checkOverflow Min m0 (+) m1     -- 9
+   (<>) (Ms m0) (Ms' m1) = checkOverflow Ms m0 (+) m1        -- 10
 
-   (<>) (Day' m0) (Day' m1) = Day' $ m0 + m1         -- 8 todo overflow
-   (<>) (Min' m0) (Min' m1) = Min' $ m0 + m1         -- 9 todo overflow
-   (<>) (Ms' m0) (Ms' m1) = Ms' $ m0 + m1            -- 10 todo overflow
+   (<>) (Day' m0) (Day' m1) = checkOverflow Day' m0 (+) m1   -- 8
+   (<>) (Min' m0) (Min' m1) = checkOverflow Min' m0 (+) m1   -- 9
+   (<>) (Ms' m0) (Ms' m1) = checkOverflow Ms' m0 (+) m1      -- 10
 
 -- decrement
 
@@ -161,11 +161,11 @@ instance Semigroup DatePartSmall where
 
 checkOverflow::forall a b. (Bounded a, Integral a, Num a) =>
    (a -> DatePartSmall)    -- ^ ctor
+   -> a
    -> (Int -> Int -> Int)  -- ^ op (+) (-)
    -> a
-   -> a
    -> DatePartSmall
-checkOverflow ctor0 fn0 a1 a2 =
+checkOverflow ctor0 a1 op0 a2 =
          if result1 >= min_aInt1
                && result1 <= max_aInt1
                then ctor0 $ fi result1
@@ -176,4 +176,4 @@ checkOverflow ctor0 fn0 a1 a2 =
          min_aInt1 = fi min_a1::Int
          max_a1 = maxBound::a
          max_aInt1 = fi max_a1::Int
-         result1 = fn0 b1 b2::Int
+         result1 = op0 b1 b2::Int
