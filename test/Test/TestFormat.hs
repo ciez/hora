@@ -30,36 +30,37 @@ main = hspec $ do
           it "week of year" $ do
             ts [Wk_year_Mon, " ", Wk_year_Sun] >>= utc
             1 `shouldBe` 1
+
        describe "TestFormat show DatePartSmall" $ do
           it "Day" $ do
             show' (mkDay 2018 08 17) `shouldBe` "2018-08-17"
           it "Min" $ do
-            show' (mkMin 14 53) `shouldBe` "14:53"
+            show' (mkMin 4 3) `shouldBe` "04:03"
           it "Ms" $ do
-            show' (mkMs 7 358) `shouldBe` "7.358"
+            show' (mkMs 7 318) `shouldBe` "07.318"
           it "Time" $ do
-            let (T.Min m1) = mkMin 15 17
-                (T.Ms ms1) = mkMs 7 358
-            show' (T.Time m1 ms1) `shouldBe` "15:17:7.358"
+            let (T.Min m1) = mkMin 5 7
+                (T.Ms ms1) = mkMs 7 58
+            show' (T.Time m1 ms1) `shouldBe` "05:07:07.058"
           it "DatePartSmall" $ do
             let (T.Day d1) = mkDay 2018 08 17
                 (T.Min m1) = mkMin 15 17
                 (T.Ms ms1) = mkMs 7 358
-            show' (T.DatePartSmall d1 m1 ms1) `shouldBe` "2018-08-17 15:17:7.358"
+            show' (T.DatePartSmall d1 m1 ms1) `shouldBe` "2018-08-17 15:17:07.358"
           it "Day'" $ do
             show' (Day' 3) `shouldBe` "+3 days"
           it "Min'" $ do
             show' (toSpan $ mkMin 14 53) `shouldBe` "+14:53"
-            show' (toSpan $ mkMin 0 53) `shouldBe` "+0:53"
+            show' (toSpan $ mkMin 0 53) `shouldBe` "+00:53"
           it "Ms'" $ do
-            show' (toSpan $ mkMs 7 358) `shouldBe` "+7.358"
+            show' (toSpan $ mkMs 7 358) `shouldBe` "+07.358"
           it "Neg Day'" $ do
             show' (T.negate $ Day' 3) `shouldBe` "-3 days"
           it "Neg Min'" $ do
             show' (T.negate $ toSpan $ mkMin 14 53) `shouldBe` "-14:53"
-            show' (T.negate $ toSpan $ mkMin 0 53) `shouldBe` "-0:53"
+            show' (T.negate $ toSpan $ mkMin 0 53) `shouldBe` "-00:53"
           it "Neg Ms'" $ do
-            show' (T.negate $ toSpan $ mkMs 7 358) `shouldBe` "-7.358"
+            show' (T.negate $ toSpan $ mkMs 7 358) `shouldBe` "-07.358"
 
 
 utc::Tz String -> IO()
