@@ -100,11 +100,17 @@ instance Semigroup DatePartSmall where
    (<>) (Min m0) (Ms ms0) = Time m0 ms0                     -- 2
 
 -- increment
-   (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = DatePartSmall (d0 + d1) m0 ms0  -- 3 todo overflow
-   (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = DatePartSmall d0 (m0 + m1) ms0  -- 4 todo overflow
-   (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = DatePartSmall d0 m0 $ ms0 + ms1 -- 5 todo overflow
-   (<>) (Time m0 ms0) (Min' m1) = Time (m0 + m1) ms0  -- 6 todo overflow
-   (<>) (Time m0 ms0) (Ms' ms1) = Time m0 $ ms0 + ms1 -- 7 todo overflow
+   (<>) (DatePartSmall d0 m0 ms0) (Day' d1) = checkOverflow
+         (\d2 -> DatePartSmall d2 m0 ms0) d0 (+) d1  -- 3
+
+   (<>) (DatePartSmall d0 m0 ms0) (Min' m1) = checkOverflow
+         (\m2 -> DatePartSmall d0 (m0 + m1) ms0) m0 (+) m1 -- 4
+
+   (<>) (DatePartSmall d0 m0 ms0) (Ms' ms1) = checkOverflow
+         (DatePartSmall d0 m0) ms0 (+) ms1 -- 5
+
+   (<>) (Time m0 ms0) (Min' m1) = checkOverflow (\m2 -> Time m2 ms0) m0 (+) m1  -- 6
+   (<>) (Time m0 ms0) (Ms' ms1) = checkOverflow (Time m0) ms0 (+) ms1   -- 7
 
    (<>) (Day m0) (Day' m1) = checkOverflow Day m0 (+) m1     -- 8
    (<>) (Min m0) (Min' m1) = checkOverflow Min m0 (+) m1     -- 9
