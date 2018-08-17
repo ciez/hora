@@ -1,7 +1,7 @@
 #####   2.2.0
     add DatePartSmall
     
-    overflow is not yet checked
+    overflow is checked when associating the items with Semigroup 
 
 #####   2.1.0
     add serializeable UTCTimeBin: close copy of UTCTime. 
