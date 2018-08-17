@@ -28,7 +28,7 @@ main = hspec $ do
       it "increment DatePartSmall by 1 day in minutes" $ do
          now1 <- now::IO UTCTime
          let small1 = fromUtc now1::DatePartSmall
-             incremented1 = normalize $ small1 <> (toSpan $ mkMin 24 0)
+             incremented1 = small1 <> (toSpan $ mkMin 24 0)
              Just utcNow2 = toUtc small1
              Just utcIncr3 = toUtc incremented1
              dp2 = fromUtc utcNow2::DatePart Int
