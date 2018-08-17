@@ -60,7 +60,7 @@ incremental values are prefixed with + or -
     2018-08-17 15:17:07.358
 
 >>>  show' $ Day' 3
-     +3 days
+     +3
 
 >>> show' $ toSpan $ mkMin 0 53
     +00:53
@@ -69,7 +69,7 @@ incremental values are prefixed with + or -
     +07.000
 
 >>> show' $ T.negate $ Day' 3
-    -3 days
+    -3
 
 >>> show' $ T.negate $ toSpan $ mkMin 14 53
     -14:53
@@ -79,7 +79,7 @@ show' dp0
    | (Day d0) <- dp0
          = format iso $ fromJust $ toUtc $ DatePartSmall d0 0 0
    | (Day' d0) <- dp0
-         = "+" <> (show d0) <> " days"
+         = "+" <> (show d0)
    | (S.Min m0) <- dp0
          = let hr1 = m0 `div` 60
                min1 = m0 `rem` 60

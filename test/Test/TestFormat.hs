@@ -48,14 +48,14 @@ main = hspec $ do
                 (T.Ms ms1) = mkMs 7 358
             show' (T.DatePartSmall d1 m1 ms1) `shouldBe` "2018-08-17 15:17:07.358"
           it "Day'" $ do
-            show' (Day' 3) `shouldBe` "+3 days"
+            show' (Day' 3) `shouldBe` "+3"
           it "Min'" $ do
             show' (toSpan $ mkMin 14 53) `shouldBe` "+14:53"
             show' (toSpan $ mkMin 0 53) `shouldBe` "+00:53"
           it "Ms'" $ do
             show' (toSpan $ mkMs 7 0) `shouldBe` "+07.000"
           it "Neg Day'" $ do
-            show' (T.negate $ Day' 3) `shouldBe` "-3 days"
+            show' (T.negate $ Day' 3) `shouldBe` "-3"
           it "Neg Min'" $ do
             show' (T.negate $ toSpan $ mkMin 14 53) `shouldBe` "-14:53"
             show' (T.negate $ toSpan $ mkMin 0 53) `shouldBe` "-00:53"
