@@ -5,6 +5,7 @@ module Data.Time.Hora.Type
     DatePartSmall(..),
     julian_day_offset,
     mkDay,
+    mkMin,
     ErrorDetail(..),
     -- * UTCTimeBin
     UTCTimeBin(..),
@@ -159,18 +160,25 @@ julian_day_offset::Integral a => a
 julian_day_offset = fromIntegral 678576
 
 
--- | 'Day'
 mkDay::Integral a =>
          a     -- ^ year
         -> a   -- ^ month
         -> a   -- ^ day
-        -> Maybe DatePartSmall
-mkDay y0 m0 d0 = valid2 <$> mday1
-   where mday1 = fromGregorianValid y1 m1 d1
+        -> DatePartSmall   -- ^ 'Day'
+mkDay y0 m0 d0 = maybe (Error Invalid) id mday2
+   where mday2 = valid2 <$> mday1::Maybe DatePartSmall
+         mday1 = fromGregorianValid y1 m1 d1
          valid2 = Day . fromIntegral . (+ julian_day_offset) . toModifiedJulianDay
          y1 = fromIntegral y0
          m1 = fromIntegral m0
          d1 = fromIntegral d0
+
+
+mkMin::(Num a, Integral a) =>
+        a      -- ^ hour
+        -> a   -- ^ minute
+        -> DatePartSmall   -- ^ 'Min'
+mkMin h0 m0 = Min $ fromIntegral $ h0 * 60 + m0
 
 
 data ErrorDetail = Invalid    -- ^ operation is not possible with these constructors
